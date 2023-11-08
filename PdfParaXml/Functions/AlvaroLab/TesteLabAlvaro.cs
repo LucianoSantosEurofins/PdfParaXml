@@ -8,13 +8,23 @@ using System.Threading.Tasks;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
 using PdfParaXml.Functions.AlvaroLab;
+using System.Xml.Serialization;
+using PdfParaXml.TemplateXML;
 namespace PdfParaXml.Functions
 {
     public class TesteLabAlvaro
     {
         public void Teste(string caminho)
         {
-            string pdfFilePath = @"C:\\Users\d9lb\Desktop\TestesPdf\1372938_OTACILIO ROCHA VASCONCELOS.PDF";
+
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Resultados));
+
+            using (FileStream fileStream = new FileStream(@"C:\Users\d9lb\Desktop\TestesPdf\ResultadoApoio_3848_20231107170326.XML", FileMode.Open))
+            {
+                Resultados resultados = (Resultados)xmlSerializer.Deserialize(fileStream);
+            }
+
+                string pdfFilePath = @"C:\\Users\d9lb\Desktop\TestesPdf\1372938_OTACILIO ROCHA VASCONCELOS.PDF";
             string outputFilePath = @"C:\\Users\\d9lb\Desktop\\TestesPdf\\output.txt";
             AlvaroLabObject alvaroLabObject = new AlvaroLabObject();
 
