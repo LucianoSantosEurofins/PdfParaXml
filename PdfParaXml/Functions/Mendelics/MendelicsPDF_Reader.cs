@@ -23,10 +23,11 @@ namespace PdfParaXml.Functions.Mendelics
 
 
             string[] arquivos = Directory.GetFiles(pastaRaiz, "*.pdf");
-
-            foreach(var arquivo in arquivos)
+            Resultados resultados = new Resultados();
+            resultados.Pedidos = new List<Pedido>();
+            foreach (var arquivo in arquivos)
             {
-                Resultados resultados = new Resultados();
+                
                 ControleDeLote controleDeLote = new ControleDeLote();
                 Pedido pedido = new Pedido();
                 List<Pedido> pedidos = new List<Pedido>();
@@ -135,16 +136,15 @@ namespace PdfParaXml.Functions.Mendelics
                 exame.ItemDeExame = itemDeExame;
                 superExame.Exame = exame;
                 pedido.SuperExame = superExame;
-                resultados.Pedidos = new List<Pedido>() { pedido };
+                resultados.Pedidos.Add(pedido);
+            }
 
-
-                XmlSerializer xmlSerializer = new XmlSerializer(resultados.GetType());
-                xmlSerializer.Serialize(Console.Out, resultados);
-                var fileName = System.IO.Path.GetFileName(arquivo).Replace(".pdf", ".XML");
-                using (StreamWriter writer = new StreamWriter(fileName))
-                {
-                    xmlSerializer.Serialize(writer, resultados);
-                }
+            XmlSerializer xmlSerializer = new XmlSerializer(resultados.GetType());
+            xmlSerializer.Serialize(Console.Out, resultados);
+            var fileName = "LoteTeste.XML"; //System.IO.Path.GetFileName("Lote teste").Replace(".pdf", ".XML");
+            using (StreamWriter writer = new StreamWriter(fileName))
+            {
+                xmlSerializer.Serialize(writer, resultados);
             }
         }
 
