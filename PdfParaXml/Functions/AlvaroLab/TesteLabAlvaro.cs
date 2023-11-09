@@ -24,7 +24,7 @@ namespace PdfParaXml.Functions
                 Resultados resultados = (Resultados)xmlSerializer.Deserialize(fileStream);
             }
 
-                string pdfFilePath = @"C:\\Users\d9lb\Desktop\TestesPdf\1372938_OTACILIO ROCHA VASCONCELOS.PDF";
+            string pdfFilePath = @"C:\\Users\d9lb\Desktop\TestesPdf\1372938_OTACILIO ROCHA VASCONCELOS.PDF";
             string outputFilePath = @"C:\\Users\\d9lb\Desktop\\TestesPdf\\output.txt";
             AlvaroLabObject alvaroLabObject = new AlvaroLabObject();
 
