@@ -102,8 +102,8 @@ namespace PdfParaXml.Functions.Mendelics
                 resultados.ID = 200;
 
                 controleDeLote.Emissor = "Aplicacao pdf para xml";
-                controleDeLote.DataEmissao = DateTime.Now.ToString();
-                controleDeLote.HoraEmissao = DateTime.Now.ToString();
+                controleDeLote.DataEmissao = DateTime.Now.ToString("dd/MM/yyyy");
+                controleDeLote.HoraEmissao = DateTime.Now.ToString("HH:mm:ss");
                 controleDeLote.CodLab = "Centro de genomas";
 
                 pedido.CodPedApoio = 1;
@@ -119,15 +119,8 @@ namespace PdfParaXml.Functions.Mendelics
 
                 itemDeExame.Nome = "RESSFET";
 
-                valor.CasasDecimais = 0;
-                valor.TamanhoMaximo = 245;
-                valor.Tipo = "alfanumerico";
-                valor.IdValor = 1;
+                valor = getFormatacaoValor();
                 valor.Text = diagnostico;
-                valor.CasasDecimais = 0;
-                valor.TamanhoMaximo = 245;
-                valor.Tipo = "alfanumerico";
-                valor.IdValor = 1;
 
                 resultados.ControleDeLote = controleDeLote;
                 conteudo.Valor = valor;
@@ -141,11 +134,25 @@ namespace PdfParaXml.Functions.Mendelics
 
             XmlSerializer xmlSerializer = new XmlSerializer(resultados.GetType());
             xmlSerializer.Serialize(Console.Out, resultados);
-            var fileName = "LoteTeste.XML"; //System.IO.Path.GetFileName("Lote teste").Replace(".pdf", ".XML");
+            var fileName = "ResultadosMendelics.XML"; //System.IO.Path.GetFileName("Lote teste").Replace(".pdf", ".XML");
             using (StreamWriter writer = new StreamWriter(fileName))
             {
                 xmlSerializer.Serialize(writer, resultados);
             }
+        }
+
+        private Valor getFormatacaoValor()
+        {
+            Valor valor = new Valor();
+            valor.CasasDecimais = 0;
+            valor.TamanhoMaximo = 245;
+            valor.Tipo = "alfanumerico";
+            valor.IdValor = 1;
+            valor.CasasDecimais = 0;
+            valor.TamanhoMaximo = 245;
+            valor.Tipo = "alfanumerico";
+            valor.IdValor = 1;
+            return valor;
         }
 
         private string getExameYT(string pdfContend)
