@@ -9,6 +9,7 @@ using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
 using PdfParaXml.TemplateXML;
 using System.Xml.Serialization;
+using PdfParaXml.Functions.CriadorDePlanilha;
 
 
 namespace PdfParaXml.Functions.Mendelics
@@ -19,7 +20,8 @@ namespace PdfParaXml.Functions.Mendelics
         public void MendelixPDFsTOXML()
         {
             string outputFilePath = @"C:\\Users\\d9lb\Desktop\\TestesPdf\\output.txt";
-            string pastaRaiz = @"C:\Users\d9lb\Desktop\TestesPdf\Mendelics\";
+            //string pastaRaiz = @"C:\Users\d9lb\Desktop\TestesPdf\Mendelics\";
+            string pastaRaiz = @"C:\Users\d9lb\Desktop\Mendelics";
 
 
             string[] arquivos = Directory.GetFiles(pastaRaiz, "*.pdf");
@@ -27,7 +29,7 @@ namespace PdfParaXml.Functions.Mendelics
             resultados.Pedidos = new List<Pedido>();
             foreach (var arquivo in arquivos)
             {
-                
+
                 ControleDeLote controleDeLote = new ControleDeLote();
                 Pedido pedido = new Pedido();
                 List<Pedido> pedidos = new List<Pedido>();
@@ -106,6 +108,7 @@ namespace PdfParaXml.Functions.Mendelics
                 controleDeLote.HoraEmissao = DateTime.Now.ToString("HH:mm:ss");
                 controleDeLote.CodLab = "Centro de genomas";
 
+                pedido.fileName = arquivo;
                 pedido.CodPedApoio = 1;
                 pedido.CodPedLab = "Teste"; //Provavelmente precisara ser ajustado futuramente
                 pedido.Nome = nome;
@@ -132,13 +135,22 @@ namespace PdfParaXml.Functions.Mendelics
                 resultados.Pedidos.Add(pedido);
             }
 
+            var listaDeExames = resultados.Pedidos.Select(p => new ModeloDePDFEExemplo { ExameNome = p.SuperExame.ExameNome, fileName = p.fileName }).GroupBy(Ex => Ex.ExameNome).Select(g => g.First()).ToList();
             XmlSerializer xmlSerializer = new XmlSerializer(resultados.GetType());
             xmlSerializer.Serialize(Console.Out, resultados);
             var fileName = "ResultadosMendelics.XML"; //System.IO.Path.GetFileName("Lote teste").Replace(".pdf", ".XML");
+            //CriadorDePlanilha.CriadorDePlanilha criadorDePlanilha = new CriadorDePlanilha.CriadorDePlanilha();
+            //criadorDePlanilha.CriarPlanilhaExcel(listaDeExames, "MendelicsExel");
             using (StreamWriter writer = new StreamWriter(fileName))
             {
                 xmlSerializer.Serialize(writer, resultados);
             }
+        }
+
+        public class ModeloDePDFEExemplo
+        {
+            public string ExameNome;
+            public string fileName;
         }
 
         private Valor getFormatacaoValor()
@@ -203,8 +215,13 @@ namespace PdfParaXml.Functions.Mendelics
         {
             string startWord = "Resultado";
             string endWord = "Comentários";
+            string endWord2 = "Genes analisados:";
+
             int startIndex = pdfContend.IndexOf(startWord);
             int endIndex = pdfContend.IndexOf(endWord);
+            int endIndex2 = pdfContend.IndexOf(endWord2);
+            if (endIndex > endIndex2 && endIndex2 > 0)
+                endIndex = endIndex2;
 
             if (startIndex != -1 && endIndex != -1)
             {

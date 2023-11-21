@@ -41,6 +41,8 @@ namespace PdfParaXml.TemplateXML
 
     public class Pedido
     {
+        [XmlIgnore]
+        public string fileName { get; set; }
         [XmlElement("CodPedApoio")]
         public int CodPedApoio { get; set; }
 
