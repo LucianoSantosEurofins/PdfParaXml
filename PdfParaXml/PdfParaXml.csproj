@@ -135,12 +135,15 @@
     </Compile>
     <Compile Include="Functions\AlvaroLab\AlvaroLabObject.cs" />
     <Compile Include="Functions\AlvaroLab\TesteLabAlvaro.cs" />
+    <Compile Include="Functions\Clinimol\ClinimolPDFReader.cs" />
+    <Compile Include="Functions\ConsultarBancoDeDados.cs" />
     <Compile Include="Functions\CriadorDePlanilha\CriadorDePlanilha.cs" />
     <Compile Include="Functions\Mendelics\MendelicsObj.cs" />
     <Compile Include="Functions\Mendelics\MendelicsPDF_Reader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TemplateXML\TemplateBaseCientifica.cs" />
+    <Compile Include="TemplateXML\TemplatePardini.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

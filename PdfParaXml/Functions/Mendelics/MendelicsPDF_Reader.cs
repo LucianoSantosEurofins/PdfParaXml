@@ -51,6 +51,7 @@ namespace PdfParaXml.Functions.Mendelics
                 string liberacaoResult = "";
                 string diagnostico = "";
                 string exameYT = "";
+                string metodo = "";
 
                 using (PdfReader reader = new PdfReader(arquivo))
                 {
@@ -89,13 +90,17 @@ namespace PdfParaXml.Functions.Mendelics
                                 liberacaoResult = getLiberaçãodoResultado(line);
 
                             if (line.Contains("Diagnóstico:"))
-                                liberacaoResult = getDiagnostico(line);
+                                liberacaoResult = getDiagnostico(line, exameYT);
 
                             if (line.Contains("Exame"))
                                 exameYT = getExameYT(line);
 
                             if (line.Contains("Resultado"))
-                                diagnostico = getDiagnostico(textConted);
+                                diagnostico = getDiagnostico(textConted, exameYT);
+
+                            if (line.Contains("Método"))
+                                metodo = getMetodo(textConted, reader);
+                                
                         }
                     }
                 }
@@ -109,16 +114,16 @@ namespace PdfParaXml.Functions.Mendelics
                 controleDeLote.CodLab = "Centro de genomas";
 
                 pedido.fileName = arquivo;
-                pedido.CodPedApoio = 1;
+                pedido.CodPedApoio = 1; //Provavelmente precisara ser ajustado futuramente
                 pedido.CodPedLab = "Teste"; //Provavelmente precisara ser ajustado futuramente
                 pedido.Nome = nome;
 
-                superExame.MaterialNome = "Teste Material";
+                superExame.MaterialNome = material;
                 superExame.ExameNome = nomeExame;
                 superExame.CodExmApoio = "Teste exameApoio";
                 superExame.CodigoFormato = 1;
 
-                exame.Metodo = "teste metodo";
+                exame.Metodo = metodo;
 
                 itemDeExame.Nome = "RESSFET";
 
@@ -211,7 +216,7 @@ namespace PdfParaXml.Functions.Mendelics
             return text;
         }
 
-        private string getDiagnostico(string pdfContend)
+        private string getDiagnostico(string pdfContend, string exameYT)
         {
             string startWord = "Resultado";
             string endWord = "Comentários";
@@ -227,6 +232,20 @@ namespace PdfParaXml.Functions.Mendelics
             {
                 int startIndexToUse = startIndex + startWord.Length;
                 string result = pdfContend.Substring(startIndexToUse, endIndex - startIndexToUse).Trim();
+                var fraseDeVerificacaoDeQuebraDLinha = "A seção de resultados continua na próxima página.";
+                var textoASerRemovido = "";
+                if (result.Contains(fraseDeVerificacaoDeQuebraDLinha))
+                {
+                    string startWord2 = fraseDeVerificacaoDeQuebraDLinha;
+                    string endWordTwo = "mendelics.com";
+                    var t = result.Count();
+                    int startIndex2 = result.IndexOf(startWord2);
+                    int endIndexTwo = result.IndexOf(endWordTwo);
+                    int startIndexToUse2 = startIndex2 + startWord2.Length;
+                    textoASerRemovido = pdfContend.Substring(startIndexToUse2, endIndexTwo - startIndexToUse2).Trim();
+                    result = result.Remove(startIndex2, endIndexTwo - startIndex2);//.Replace(char.Parse( "Exame" + exameYT), '.');
+                }
+
                 return result;
             }
             else
@@ -363,6 +382,38 @@ namespace PdfParaXml.Functions.Mendelics
             if (match.Success)
             {
                 return match.Value;
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        private string getPdfTextLastPage(PdfReader pdfReader)
+        {
+            string text = "";
+
+            for (int i = 1; i <= pdfReader.NumberOfPages; i++)
+            {
+                text = PdfTextExtractor.GetTextFromPage(pdfReader, i);
+            }
+
+            return text;
+        }
+
+        private string getMetodo(string pdfContend, PdfReader reader)
+        {
+            string startWord = "Método";
+            string endWord = "Responsável:";
+            pdfContend = getPdfTextLastPage(reader);
+            int startIndex = pdfContend.IndexOf(startWord);
+            int endIndex = pdfContend.IndexOf(endWord);
+
+            if (startIndex != -1 && endIndex != -1)
+            {
+                int startIndexToUse = startIndex + startWord.Length;
+                string result = pdfContend.Substring(startIndexToUse, endIndex - startIndexToUse).Trim();
+                return result;
             }
             else
             {
