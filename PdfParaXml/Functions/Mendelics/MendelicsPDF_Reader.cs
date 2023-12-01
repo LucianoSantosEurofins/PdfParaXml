@@ -19,9 +19,9 @@ namespace PdfParaXml.Functions.Mendelics
 
         public void MendelixPDFsTOXML()
         {
-            string outputFilePath = @"C:\\Users\\d9lb\Desktop\\TestesPdf\\output.txt";
+            string outputFilePath = Directory.GetCurrentDirectory(); ;
             //string pastaRaiz = @"C:\Users\d9lb\Desktop\TestesPdf\Mendelics\";
-            string pastaRaiz = @"C:\Users\d9lb\Desktop\Mendelics";
+            string pastaRaiz = @"C:\Users\d9lb\OneDrive - Eurofins\Área de Trabalho\Mendelics";
 
 
             string[] arquivos = Directory.GetFiles(pastaRaiz, "*.pdf");
@@ -55,8 +55,8 @@ namespace PdfParaXml.Functions.Mendelics
 
                 using (PdfReader reader = new PdfReader(arquivo))
                 {
-                    using (StreamWriter writer = new StreamWriter(outputFilePath))
-                    {
+                    //using (StreamWriter writer = new StreamWriter(outputFilePath))
+                    //{
                         var textConted = getPdfText(reader);
                         var pdfLines = textConted.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 
@@ -92,7 +92,7 @@ namespace PdfParaXml.Functions.Mendelics
                             if (line.Contains("Diagnóstico:"))
                                 liberacaoResult = getDiagnostico(line, exameYT);
 
-                            if (line.Contains("Exame"))
+                            if (line.Contains("Exame") && !line.Contains(":"))
                                 exameYT = getExameYT(line);
 
                             if (line.Contains("Resultado"))
@@ -101,7 +101,7 @@ namespace PdfParaXml.Functions.Mendelics
                             if (line.Contains("Método"))
                                 metodo = getMetodo(textConted, reader);
                                 
-                        }
+                       // }
                     }
                 }
 
@@ -114,7 +114,7 @@ namespace PdfParaXml.Functions.Mendelics
                 controleDeLote.CodLab = "Centro de genomas";
 
                 pedido.fileName = arquivo;
-                pedido.CodPedApoio = 1; //Provavelmente precisara ser ajustado futuramente
+                pedido.CodPedApoio = exameYT; //Provavelmente precisara ser ajustado futuramente
                 pedido.CodPedLab = "Teste"; //Provavelmente precisara ser ajustado futuramente
                 pedido.Nome = nome;
 

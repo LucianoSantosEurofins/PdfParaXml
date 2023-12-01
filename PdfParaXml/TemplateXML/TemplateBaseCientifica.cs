@@ -44,7 +44,7 @@ namespace PdfParaXml.TemplateXML
         [XmlIgnore]
         public string fileName { get; set; }
         [XmlElement("CodPedApoio")]
-        public int CodPedApoio { get; set; }
+        public string CodPedApoio { get; set; }
 
         [XmlElement("CodPedLab")]
         public string CodPedLab { get; set; }

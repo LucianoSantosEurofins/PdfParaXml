@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using PdfParaXml.Functions;
 using PdfParaXml.Functions.Mendelics;
+using PdfParaXml.Functions.Sollutio;
 
 namespace PdfParaXml
 {
@@ -23,8 +24,9 @@ namespace PdfParaXml
         {
             TesteLabAlvaro testeLabAlvaro = new TesteLabAlvaro();
             MendelicsPDF_Reader mendelicsPDF_Reader = new MendelicsPDF_Reader();
-
-            mendelicsPDF_Reader.MendelixPDFsTOXML();
+            SollutioPDF_Reader sollutioPDF_Reader = new SollutioPDF_Reader();
+            sollutioPDF_Reader.SollutioPDFToXML();
+            //mendelicsPDF_Reader.MendelixPDFsTOXML();
             //testeLabAlvaro.Teste("");
         }
     }
