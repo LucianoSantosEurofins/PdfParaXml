@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using PdfParaXml.TemplateXML;
 using iTextSharp.text.pdf.parser;
 using System.Text.RegularExpressions;
+using PdfParaXml.Functions.PDFImgCapture;
+using System.Drawing;
 
 namespace PdfParaXml.Functions.Sollutio
 {
@@ -22,8 +24,10 @@ namespace PdfParaXml.Functions.Sollutio
 
 
             string[] arquivos = Directory.GetFiles(pastaRaiz, "*.pdf");
+            PDF_ImgCapture pDFImgCapture = new PDF_ImgCapture();
             Resultados resultados = new Resultados();
             resultados.Pedidos = new List<Pedido>();
+
             foreach (var arquivo in arquivos)
             {
                 //XML Base científica
@@ -39,6 +43,9 @@ namespace PdfParaXml.Functions.Sollutio
 
                 //XML Pardini
 
+                //Capturar resultado de imagem
+                Rectangle regionToCapture = new Rectangle(100, 100, 300, 200);
+                pDFImgCapture.CaptureRegionFromPdf(arquivo, 1, regionToCapture);
 
                 string nome = "";
                 string sexo = "";
