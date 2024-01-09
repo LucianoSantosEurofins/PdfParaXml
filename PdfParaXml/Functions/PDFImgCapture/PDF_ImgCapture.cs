@@ -11,7 +11,7 @@ using iText.Kernel.Pdf.Canvas.Parser.Listener;
 using iText.Kernel.Pdf.Xobject;
 
 namespace PdfParaXml.Functions.PDFImgCapture
-{//d
+{
     public class PDF_ImgCapture
     {
         public void CaptureRegionFromPdf(string pdfFilePath, int pageNumber, string fileName, int imgPosition)

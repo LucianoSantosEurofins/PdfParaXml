@@ -50,12 +50,45 @@ namespace PdfParaXml.Functions.Sollutio
                 string nomeExame = "";
                 string dataNascimento = "";
                 string solicitante = "";
+                string requisicao = "";
+                string cliente = "";
+                string codExterno = "";
+                string dtAbertura = "";
 
                 using (PdfReader reader = new PdfReader(arquivo))
                 {
                     var textConted = getPdfText(reader);
-                    var pdfLines = textConted.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+                    var pdfLines = textConted.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None).ToList();
 
+                    foreach(var line in pdfLines)
+                    {
+                        if (line.Contains("Nome:"))
+                            nome = pdfLines[pdfLines.IndexOf(line) - 1];
+
+                        if (line.Contains("Requisição:"))
+                            requisicao = pdfLines[pdfLines.IndexOf(line) - 1];
+
+                        if (line.Contains("DN:"))
+                            dataNascimento = pdfLines[pdfLines.IndexOf(line) - 1];
+
+                        if (line.Contains("Cliente:"))
+                            cliente = pdfLines[pdfLines.IndexOf(line) - 1];
+
+                        if (line.Contains("Código externo:"))
+                            codExterno = pdfLines[pdfLines.IndexOf(line) - 1];
+
+                        if (line.Contains("Medico Solicitante:"))
+                            solicitante = pdfLines[pdfLines.IndexOf(line) - 1];
+
+                        if (line.Contains("Sexo:"))
+                            sexo = getSexo(line);
+
+                        if (line.Contains("Data da Abertura:"))
+                        {
+                            dtAbertura = getDataAbertura(line);
+                            nomeExame = pdfLines[pdfLines.IndexOf(line) + 1];
+                        }
+                    }
                 }
             }
         }
@@ -67,9 +100,9 @@ namespace PdfParaXml.Functions.Sollutio
             pDFImgCapture.CaptureRegionFromPdf(arquivo, 1, fileName, 4);
         }
 
-        private string getNome(string pdfContend)
+        private string getSexo(string pdfContend)
         {
-            string metodoPatern = @"(?<=Nome:).*$";
+            string metodoPatern = @"(?<=Sexo:).*$";
             Match match = Regex.Match(pdfContend, metodoPatern);
 
             if (match.Success)
@@ -81,6 +114,22 @@ namespace PdfParaXml.Functions.Sollutio
                 return "";
             }
         }
+
+        private string getDataAbertura(string pdfContend)
+        {
+            string metodoPatern = @"(?<=Data da Abertura:).*$";
+            Match match = Regex.Match(pdfContend, metodoPatern);
+
+            if (match.Success)
+            {
+                return match.Value;
+            }
+            else
+            {
+                return "";
+            }
+        }
+
         private string getPdfText(PdfReader pdfReader)
         {
             string text = "";
