@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
 using iText.Kernel.Pdf.Canvas.Parser.Data;
 using iText.Kernel.Pdf.Canvas.Parser.Listener;
+using iText.Kernel.Pdf.Xobject;
 
 namespace PdfParaXml.Functions.PDFImgCapture
 {
     public class PDF_ImgCapture
     {
-        public void CaptureRegionFromPdf(string pdfFilePath, int pageNumber, Rectangle region, string fileNAme)
+        public void CaptureRegionFromPdf(string pdfFilePath, int pageNumber, string fileName, int imgPosition)
         {
             using (var pdfReader = new PdfReader(pdfFilePath))
             {
@@ -21,39 +23,48 @@ namespace PdfParaXml.Functions.PDFImgCapture
                     var page = pdfDocument.GetPage(pageNumber);
 
                     // Use iTextSharp's parser to extract text and graphics
-                    var listener = new ImageRenderListener();
-                    PdfCanvasProcessor parser = new PdfCanvasProcessor(listener);
-                    parser.ProcessPageContent(page);
+                    var listener = new ImageExtractionListener();
+                    PdfCanvasProcessor parserImgCordinates = new PdfCanvasProcessor(listener);
+                    parserImgCordinates.ProcessPageContent(page);
 
                     // Get the captured image
-                    Image fullImage = listener.GetImage();
-
+                    var resultadoDeImgExam = listener.GetImagens();
+                    var imagemBytes = resultadoDeImgExam[imgPosition].imgBytes;
                     // Capture the specified region
-                    Image regionImage = CaptureRegion(fullImage, region);
+                    Bitmap resultImage = ConverterBytesParaImagem(imagemBytes);
 
                     // Save the region image to a file (or do whatever you need with it)
-                    regionImage.Save($"{fileNAme}captured_region.png", ImageFormat.Png);
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        using (FileStream fs = new FileStream($"{fileName}captured_region.png",FileMode.Create, FileAccess.ReadWrite))
+                        {
+                            var saveImage =  new Bitmap(resultImage);
+                            saveImage.Save(ms, ImageFormat.Png);
+                            byte[] bytes = ms.ToArray();
+                            fs.Write(bytes, 0, bytes.Length);
+                        }
+                    }
                 }
             }
         }
 
-        static Image CaptureRegion(Image fullImage, Rectangle region)
+        static Image CaptureRegion(Image fullImage, System.Drawing.Rectangle region)
         {
             Bitmap bmp = new Bitmap(region.Width, region.Height);
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                g.DrawImage(fullImage, new Rectangle(0, 0, bmp.Width, bmp.Height), region, GraphicsUnit.Pixel);
+                g.DrawImage(fullImage, new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height), region, GraphicsUnit.Pixel);
             }
             return bmp;
         }
 
-        public Image ConverterBytesParaImagem(byte[] bytes)
+        private Bitmap ConverterBytesParaImagem(byte[] bytes)
         {
             try
             {
                 using (MemoryStream ms = new MemoryStream(bytes))
                 {
-                    Image imagem = Image.FromStream(ms);
+                    Bitmap imagem = (Bitmap)Bitmap.FromStream(ms);
                     return imagem;
                 }
             }
@@ -65,58 +76,53 @@ namespace PdfParaXml.Functions.PDFImgCapture
         }
     }
 
-
-
-    class ImageRenderListener : IEventListener
+    public class ImageExtractionListener : IEventListener
     {
-        private Image image;
 
-        void IEventListener.EventOccurred(IEventData data, EventType type)
+        public readonly List<ImageInfo> imagens = new List<ImageInfo>();
+
+        public void EventOccurred(IEventData data, EventType type)
         {
             if (type == EventType.RENDER_IMAGE)
             {
                 var renderInfo = (ImageRenderInfo)data;
                 var imageObject = renderInfo.GetImage();
-                if (imageObject != null)
+                var xObject = imageObject;
+
+                var imagem = new ImageInfo
                 {
-                    image = ConverterBytesParaImagem(imageObject.GetImageBytes());
-                }
+                    X = renderInfo.GetImageCtm().Get(Matrix.I31),
+                    Y = renderInfo.GetImageCtm().Get(Matrix.I32),
+                    Largura = xObject.GetWidth(),
+                    Altura = xObject.GetHeight(),
+                    imgBytes = xObject.GetImageBytes()
+                };
+                imagens.Add(imagem);
             }
+        }
+
+        public List<ImageInfo> GetImagens()
+        {
+            return imagens;
         }
 
         public ICollection<EventType> GetSupportedEvents()
         {
             // Retorna a coleção de eventos suportados pelo ouvinte
-            return new HashSet<EventType> {             
+            return new HashSet<EventType> {
                 EventType.RENDER_TEXT,
                 EventType.RENDER_IMAGE,};
             // Adicione outros eventos suportados, se necessário
         }
 
-
-            public Image GetImage()
+        public class ImageInfo
         {
-            return image;
+            public float X { get; set; }
+            public float Y { get; set; }
+            public float Largura { get; set; }
+            public float Altura { get; set; }
+            public byte[] imgBytes { get; set; }
         }
-
-        private Image ConverterBytesParaImagem(byte[] bytes)
-        {
-            try
-            {
-                using (MemoryStream ms = new MemoryStream(bytes))
-                {
-                    Image imagem = Image.FromStream(ms);
-                    return imagem;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Erro ao converter bytes para imagem: " + ex.Message);
-                return null;
-            }
-        }
-
-
     }
 }
 

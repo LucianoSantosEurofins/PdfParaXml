@@ -24,7 +24,6 @@ namespace PdfParaXml.Functions.Sollutio
 
 
             string[] arquivos = Directory.GetFiles(pastaRaiz, "*.pdf");
-            PDF_ImgCapture pDFImgCapture = new PDF_ImgCapture();
             Resultados resultados = new Resultados();
             resultados.Pedidos = new List<Pedido>();
 
@@ -44,8 +43,7 @@ namespace PdfParaXml.Functions.Sollutio
                 //XML Pardini
 
                 //Capturar resultado de imagem
-                Rectangle regionToCapture = new Rectangle(100, 100, 300, 200);
-                pDFImgCapture.CaptureRegionFromPdf(arquivo, 1, regionToCapture);
+                SaveExamImageResult(arquivo);
 
                 string nome = "";
                 string sexo = "";
@@ -60,6 +58,13 @@ namespace PdfParaXml.Functions.Sollutio
 
                 }
             }
+        }
+
+        private void SaveExamImageResult(string arquivo)
+        {
+            PDF_ImgCapture pDFImgCapture = new PDF_ImgCapture();
+            var fileName = System.IO.Path.GetFileNameWithoutExtension(arquivo);
+            pDFImgCapture.CaptureRegionFromPdf(arquivo, 1, fileName, 4);
         }
 
         private string getNome(string pdfContend)
