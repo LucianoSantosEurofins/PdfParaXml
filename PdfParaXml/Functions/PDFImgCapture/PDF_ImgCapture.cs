@@ -13,7 +13,7 @@ using iText.Kernel.Pdf.Xobject;
 namespace PdfParaXml.Functions.PDFImgCapture
 {
     public class PDF_ImgCapture
-    {
+    {//a
         public void CaptureRegionFromPdf(string pdfFilePath, int pageNumber, string fileName, int imgPosition)
         {
             using (var pdfReader = new PdfReader(pdfFilePath))
