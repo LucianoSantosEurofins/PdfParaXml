@@ -26,7 +26,7 @@ namespace PdfParaXml
             MendelicsPDF_Reader mendelicsPDF_Reader = new MendelicsPDF_Reader();
             SollutioPDF_Reader sollutioPDF_Reader = new SollutioPDF_Reader();
             sollutioPDF_Reader.SollutioPDFToXML();
-            //mendelicsPDF_Reader.MendelixPDFsTOXML();
+            mendelicsPDF_Reader.MendelixPDFsTOXML();
             //testeLabAlvaro.Teste("");
         }
     }

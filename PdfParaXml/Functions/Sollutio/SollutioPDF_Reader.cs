@@ -55,6 +55,9 @@ namespace PdfParaXml.Functions.Sollutio
                 string codExterno = "";
                 string dtAbertura = "";
 
+                string metodo = "";
+                string interpretacao = "";
+
                 using (PdfReader reader = new PdfReader(arquivo))
                 {
                     var textConted = getPdfText(reader);
@@ -88,6 +91,10 @@ namespace PdfParaXml.Functions.Sollutio
                             dtAbertura = getDataAbertura(line);
                             nomeExame = pdfLines[pdfLines.IndexOf(line) + 1];
                         }
+
+                        if (line.Contains("Interpretação:"))
+                            interpretacao = getInterPretacao(textConted, reader);
+
                     }
                 }
             }
@@ -98,6 +105,38 @@ namespace PdfParaXml.Functions.Sollutio
             PDF_ImgCapture pDFImgCapture = new PDF_ImgCapture();
             var fileName = System.IO.Path.GetFileNameWithoutExtension(arquivo);
             pDFImgCapture.CaptureRegionFromPdf(arquivo, 1, fileName, 4);
+        }
+
+        private string getInterPretacao(string pdfContend, PdfReader reader)
+        {
+            string startWord = "46,XY sexo masculino";
+            string endWord = "Notas:";
+            pdfContend = getPdfTextLastPage(reader);
+            int startIndex = pdfContend.IndexOf(startWord);
+            int endIndex = pdfContend.IndexOf(endWord);
+
+            if (startIndex != -1 && endIndex != -1)
+            {
+                int startIndexToUse = startIndex + startWord.Length;
+                string result = pdfContend.Substring(startIndexToUse, endIndex - startIndexToUse).Trim();
+                return result;
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        private string getPdfTextLastPage(PdfReader pdfReader)
+        {
+            string text = "";
+
+            for (int i = 1; i <= pdfReader.NumberOfPages; i++)
+            {
+                text = PdfTextExtractor.GetTextFromPage(pdfReader, i);
+            }
+
+            return text;
         }
 
         private string getSexo(string pdfContend)

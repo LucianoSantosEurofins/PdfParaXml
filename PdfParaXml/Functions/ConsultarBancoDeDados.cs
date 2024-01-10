@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PdfParaXml.objBancoDeDados;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -9,19 +10,27 @@ namespace PdfParaXml.Functions
 {
     public class ConsultarBancoDeDados
     {
-        public void GetNumAtendimento(string nomePaciente, string connectionString = "Data Source=192.168.2.13;Initial Catalog=Pleres-CentroDeGenomas;User ID=luciano.oliveira;Password=Eurofins$#@!2023;")
-        { 
+        public ResultadoConsultaExame GetNumAtendimento(string nomePaciente, string connectionString = "Server=192.168.2.13;Database=Pleres-CentroDeGenomas;User Id=luciano.oliveira;Password=Eurofins$#@!2023;")
+        {
+            ResultadoConsultaExame resultadoConsultaExame = new ResultadoConsultaExame();
+
+            string idExame = "";
+            string nome = "";
+            string idAtendimento = "";
+            string numAtendimento = "";
             try
             {
                 // Cria uma nova conexão com o SQL Server
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = new SqlConnection())
                 {
                     // Abre a conexão
+                    //connection.ConnectionString = "Data Source=192.168.2.13;Initial Catalog=Pleres-CentroDeGenomas;User ID=luciano.oliveira;Password=Eurofins$@!2023;";
+                    connection.ConnectionString = "Server=192.168.2.13;Database=Pleres-CentroDeGenomas;User Id=luciano.oliveira;Password=Eurofins$#@!2023;Persist Security Info=True;";
                     connection.Open();
 
                     // Exemplo de uma consulta SQL
-                    string query = "    SELECT DISTINCT " +
-                                   "     exame.id, " +
+                    string query = "SELECT DISTINCT " +
+                                   "    exame.id, " +
                                    " 	pessoa_fisica.str_nome, " +
                                    " 	atendimento.id, " +
                                    " 	atendimento.num_atendimento  " +
@@ -44,9 +53,10 @@ namespace PdfParaXml.Functions
                             // Processa os resultados da consulta
                             while (reader.Read())
                             {
-                                // Exemplo: obtendo valores da coluna "Nome"
-                                string nome = reader["Nome"].ToString();
-                                Console.WriteLine("Nome: " + nome);
+                                resultadoConsultaExame.idExame =        reader["id"].ToString();
+                                resultadoConsultaExame.nome =           reader["str_nome"].ToString();
+                                resultadoConsultaExame.idAtendimento =  reader["IdAtendimento"].ToString();
+                                resultadoConsultaExame.numAtendimento = reader["num_atendimento"].ToString();
                             }
                         }
                     }
@@ -56,6 +66,8 @@ namespace PdfParaXml.Functions
             {
                 Console.WriteLine("Erro: " + ex.Message);
             }
+
+            return resultadoConsultaExame;
         }
     }
 }

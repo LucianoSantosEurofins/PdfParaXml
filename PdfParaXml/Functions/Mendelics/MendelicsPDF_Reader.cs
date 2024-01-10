@@ -21,7 +21,7 @@ namespace PdfParaXml.Functions.Mendelics
         {
             string outputFilePath = Directory.GetCurrentDirectory(); ;
             //string pastaRaiz = @"C:\Users\d9lb\Desktop\TestesPdf\Mendelics\";
-            string pastaRaiz = @"C:\Users\d9lb\OneDrive - Eurofins\Área de Trabalho\Mendelics";
+            string pastaRaiz = @"C:\Users\d9lb\OneDrive - Eurofins\Área de Trabalho\Mendelics2";
 
 
             string[] arquivos = Directory.GetFiles(pastaRaiz, "*.pdf");
@@ -105,6 +105,8 @@ namespace PdfParaXml.Functions.Mendelics
                     }
                 }
 
+                ConsultarBancoDeDados consultarBancoDeDados = new ConsultarBancoDeDados();
+
                 resultados.Protocolo = 1;
                 resultados.ID = 200;
 
@@ -115,7 +117,7 @@ namespace PdfParaXml.Functions.Mendelics
 
                 pedido.fileName = arquivo;
                 pedido.CodPedApoio = exameYT; //Provavelmente precisara ser ajustado futuramente
-                pedido.CodPedLab = "Teste"; //Provavelmente precisara ser ajustado futuramente
+                pedido.CodPedLab = consultarBancoDeDados.GetNumAtendimento(nome).nome;
                 pedido.Nome = nome;
 
                 superExame.MaterialNome = material;
