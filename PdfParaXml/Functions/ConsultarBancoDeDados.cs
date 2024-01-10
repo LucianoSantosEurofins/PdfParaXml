@@ -14,18 +14,12 @@ namespace PdfParaXml.Functions
         {
             ResultadoConsultaExame resultadoConsultaExame = new ResultadoConsultaExame();
 
-            string idExame = "";
-            string nome = "";
-            string idAtendimento = "";
-            string numAtendimento = "";
             try
             {
                 // Cria uma nova conexão com o SQL Server
-                using (SqlConnection connection = new SqlConnection())
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     // Abre a conexão
-                    //connection.ConnectionString = "Data Source=192.168.2.13;Initial Catalog=Pleres-CentroDeGenomas;User ID=luciano.oliveira;Password=Eurofins$@!2023;";
-                    connection.ConnectionString = "Server=192.168.2.13;Database=Pleres-CentroDeGenomas;User Id=luciano.oliveira;Password=Eurofins$#@!2023;Persist Security Info=True;";
                     connection.Open();
 
                     // Exemplo de uma consulta SQL
