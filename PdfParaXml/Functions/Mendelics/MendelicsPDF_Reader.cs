@@ -142,9 +142,24 @@ namespace PdfParaXml.Functions.Mendelics
             var fileName = "ResultadosMendelics.XML"; //System.IO.Path.GetFileName("Lote teste").Replace(".pdf", ".XML");
             //CriadorDePlanilha.CriadorDePlanilha criadorDePlanilha = new CriadorDePlanilha.CriadorDePlanilha();
             //criadorDePlanilha.CriarPlanilhaExcel(listaDeExames, "MendelicsExel");
+            var destinoDosPDFs = CreatePdfsDir("PDFs Usados\\PDFs Mendelics");
+            MoverArquivos(pastaRaiz, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, destinoDosPDFs), arquivos);
             using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine(localizacaoXML, fileName)))
             {
                 xmlSerializer.Serialize(writer, resultados);
+            }
+        }
+
+        static void MoverArquivos(string origem, string destino, string[] arquivos)
+        {
+
+            foreach (var arquivo in arquivos)
+            {
+                string caminhoOrigem = System.IO.Path.Combine(origem, arquivo);
+                string caminhoDestino = System.IO.Path.Combine(destino, System.IO.Path.GetFileName(arquivo));
+
+                // Use o método Move da classe File para mover o arquivo
+                File.Move(caminhoOrigem, caminhoDestino);
             }
         }
 
@@ -152,6 +167,16 @@ namespace PdfParaXml.Functions.Mendelics
         {
             public string ExameNome;
             public string fileName;
+        }
+
+        private string CreatePdfsDir(string pastaRaiz)
+        {
+            var path = pastaRaiz;
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            return path;
         }
 
         private Valor getFormatacaoValor()

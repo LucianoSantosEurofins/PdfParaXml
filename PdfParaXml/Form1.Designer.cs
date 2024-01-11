@@ -42,6 +42,9 @@ namespace PdfParaXml
             this.btn_SelectXMLFolder = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button2 = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button3 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -129,6 +132,26 @@ namespace PdfParaXml
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // label4
+            // 
+            resources.ApplyResources(this.label4, "label4");
+            this.label4.Name = "label4";
+            // 
+            // textBox1
+            // 
+            resources.ApplyResources(this.textBox1, "textBox1");
+            this.textBox1.Name = "textBox1";
+            // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.Transparent;
+            resources.ApplyResources(this.button3, "button3");
+            this.button3.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button3.FlatAppearance.BorderSize = 0;
+            this.button3.Name = "button3";
+            this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.btn_SelectFolderSollutio_Click);
+            // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
@@ -137,11 +160,14 @@ namespace PdfParaXml
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btn_SelectXMLFolder);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.btn_SelectFolderSollutio);
             this.Controls.Add(this.btn_SelectFolderMendelics);
             this.Controls.Add(this.textBox_XMLLocation);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.textBox_LocationSollutio);
             this.Controls.Add(this.textBox_LocationMendelics);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
@@ -165,6 +191,9 @@ namespace PdfParaXml
         private System.Windows.Forms.Button btn_SelectXMLFolder;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button button3;
     }
 }
 

@@ -138,15 +138,15 @@ namespace PdfParaXml.Functions.Sollutio
                     itemDeExame[1].Resultado.Conteudo.Valor.Text = numDeCelulas;
 
                     itemDeExame.Add(new ItemDeExame{Nome = "RES",
-                        Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = getFormatacaoValor()}}});
+                                                    Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = getFormatacaoValor()}}});
                     itemDeExame[2].Resultado.Conteudo.Valor.Text = bandeamento;
 
                     itemDeExame.Add(new ItemDeExame{Nome = "INTERP",
-                        Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = getFormatacaoValor()}}});
+                                                    Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = getFormatacaoValor()}}});
                     itemDeExame[3].Resultado.Conteudo.Valor.Text = interpretacao;
 
                     itemDeExame.Add(new ItemDeExame{Nome = "IMAGEM",
-                        Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = getFormatacaoValor() } }});
+                                                    Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = getFormatacaoValor() } }});
                     itemDeExame[4].Resultado.Conteudo.Valor.Text = Convert.ToBase64String(img);
 
                     valor = getFormatacaoValor();
@@ -155,7 +155,6 @@ namespace PdfParaXml.Functions.Sollutio
                     resultados.ControleDeLote = controleDeLote;
                     conteudo.Valor = valor;
                     resultado.Conteudo = conteudo;
-                    //itemDeExame.Resultado = resultado;
                     exame.ItemDeExame = itemDeExame;
                     superExame.Exame = exame;
                     pedido.SuperExame = superExame;
@@ -169,7 +168,8 @@ namespace PdfParaXml.Functions.Sollutio
             var fileName = "ResultadosSollutio.XML"; //System.IO.Path.GetFileName("Lote teste").Replace(".pdf", ".XML");
             //CriadorDePlanilha.CriadorDePlanilha criadorDePlanilha = new CriadorDePlanilha.CriadorDePlanilha();
             //criadorDePlanilha.CriarPlanilhaExcel(listaDeExames, "MendelicsExel");
-            CreatePdfsDir(pastaRaiz);
+            var destinoDosPDFs = CreatePdfsDir("PDFs Usados\\PDFs Sollutio");
+            MoverArquivos(pastaRaiz, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, destinoDosPDFs), arquivos);
             using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine(localizacaoXML,fileName)))
             {
                 xmlSerializer.Serialize(writer, resultados);
@@ -178,12 +178,25 @@ namespace PdfParaXml.Functions.Sollutio
 
         private string CreatePdfsDir(string pastaRaiz)
         {
-            var path = System.IO.Path.Combine(pastaRaiz, "PDFsSolutio");
+            var path = pastaRaiz;
 
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
 
             return path;
+        }
+
+        static void MoverArquivos(string origem, string destino, string[] arquivos)
+        {
+            
+            foreach (var arquivo in arquivos)
+            {
+                string caminhoOrigem = System.IO.Path.Combine(origem, arquivo);
+                string caminhoDestino = System.IO.Path.Combine(destino, System.IO.Path.GetFileName(arquivo));
+
+                // Use o método Move da classe File para mover o arquivo
+                File.Move(caminhoOrigem, caminhoDestino);
+            }
         }
 
         private string CreateImgResultDirectory(string pastaRaiz)

@@ -285,5 +285,8 @@
     <Content Include="IMG\pngaaa.com-5149826ICONE.ico" />
     <Content Include="IMG\texto-para-fala.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Functions\IPOG\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
