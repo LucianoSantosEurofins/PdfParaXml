@@ -1,5 +1,5 @@
 ﻿using iTextSharp.text.pdf;
-using PdfParaXml.TemplateXML;
+using PdfParaXml.TemplateSollutio;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,7 +34,7 @@ namespace PdfParaXml.Functions.Sollutio
                 List<Pedido> pedidos = new List<Pedido>();
                 SuperExame superExame = new SuperExame();
                 Exame exame = new Exame();
-                ItemDeExame itemDeExame = new ItemDeExame();
+                List<ItemDeExame> itemDeExame = new List<ItemDeExame>();
                 Resultado resultado = new Resultado();
                 Valor valor = new Valor();
                 Conteudo conteudo = new Conteudo();
@@ -55,6 +55,7 @@ namespace PdfParaXml.Functions.Sollutio
                 string interpretacao = "";
                 string resultadoTxt = "";
                 string bandeamento = "";
+                string numDeCelulas = "";
 
                 using (PdfReader reader = new PdfReader(arquivo))
                 {
@@ -101,10 +102,13 @@ namespace PdfParaXml.Functions.Sollutio
 
                         if (line.Contains("Bandeamento:"))
                             bandeamento = pdfLines[pdfLines.IndexOf(line) + 1];
+
+                        if(line.Contains("Total de Células"))
+                            numDeCelulas = pdfLines[pdfLines.IndexOf(line) + 1];
                     }
 
                     //Capturar resultado de imagem
-                    SaveExamImageResult(arquivo, CreateImgResultDirectory(localizacaoXML), nome, codExterno);
+                    var img = SaveExamImageResult(arquivo, CreateImgResultDirectory(localizacaoXML), nome, codExterno);
 
                     resultados.Protocolo = 1;
                     resultados.ID = 200;
@@ -123,10 +127,27 @@ namespace PdfParaXml.Functions.Sollutio
                     superExame.ExameNome = nomeExame;
                     superExame.CodExmApoio = "Teste exameApoio";
                     superExame.CodigoFormato = 1;
+                    
 
                     exame.Metodo = metodo;
+                    itemDeExame.Add(new ItemDeExame { Nome = "RESULT",
+                                                      Resultado = resultado});
 
-                    itemDeExame.Nome = "RESSCARIOTIPO";
+                    itemDeExame.Add(new ItemDeExame { Nome = "NUMERO",
+                                                      Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = getFormatacaoValor()}}});
+                    itemDeExame[1].Resultado.Conteudo.Valor.Text = numDeCelulas;
+
+                    itemDeExame.Add(new ItemDeExame{Nome = "RES",
+                        Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = getFormatacaoValor()}}});
+                    itemDeExame[2].Resultado.Conteudo.Valor.Text = bandeamento;
+
+                    itemDeExame.Add(new ItemDeExame{Nome = "INTERP",
+                        Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = getFormatacaoValor()}}});
+                    itemDeExame[3].Resultado.Conteudo.Valor.Text = interpretacao;
+
+                    itemDeExame.Add(new ItemDeExame{Nome = "IMAGEM",
+                        Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = getFormatacaoValor() } }});
+                    itemDeExame[4].Resultado.Conteudo.Valor.Text = Convert.ToBase64String(img);
 
                     valor = getFormatacaoValor();
                     valor.Text = resultadoTxt;
@@ -134,13 +155,13 @@ namespace PdfParaXml.Functions.Sollutio
                     resultados.ControleDeLote = controleDeLote;
                     conteudo.Valor = valor;
                     resultado.Conteudo = conteudo;
-                    itemDeExame.Resultado = resultado;
+                    //itemDeExame.Resultado = resultado;
                     exame.ItemDeExame = itemDeExame;
                     superExame.Exame = exame;
                     pedido.SuperExame = superExame;
                     resultados.Pedidos.Add(pedido);
                 }
-            }//teste
+            }
 
             //var listaDeExames = resultados.Pedidos.Select(p => new ModeloDePDFEExemplo { ExameNome = p.SuperExame.ExameNome, fileName = p.fileName }).GroupBy(Ex => Ex.ExameNome).Select(g => g.First()).ToList();
             XmlSerializer xmlSerializer = new XmlSerializer(resultados.GetType());
@@ -148,10 +169,21 @@ namespace PdfParaXml.Functions.Sollutio
             var fileName = "ResultadosSollutio.XML"; //System.IO.Path.GetFileName("Lote teste").Replace(".pdf", ".XML");
             //CriadorDePlanilha.CriadorDePlanilha criadorDePlanilha = new CriadorDePlanilha.CriadorDePlanilha();
             //criadorDePlanilha.CriarPlanilhaExcel(listaDeExames, "MendelicsExel");
+            CreatePdfsDir(pastaRaiz);
             using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine(localizacaoXML,fileName)))
             {
                 xmlSerializer.Serialize(writer, resultados);
             }
+        }
+
+        private string CreatePdfsDir(string pastaRaiz)
+        {
+            var path = System.IO.Path.Combine(pastaRaiz, "PDFsSolutio");
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            return path;
         }
 
         private string CreateImgResultDirectory(string pastaRaiz)
@@ -164,11 +196,11 @@ namespace PdfParaXml.Functions.Sollutio
             return path;
         }
 
-        private void SaveExamImageResult(string arquivo, string destino, string paciente, string numeroAtendimento)
+        private byte [] SaveExamImageResult(string arquivo, string destino, string paciente, string numeroAtendimento)
         {
             PDF_ImgCapture pDFImgCapture = new PDF_ImgCapture();
             var fileName = System.IO.Path.GetFileNameWithoutExtension(arquivo);
-            pDFImgCapture.CaptureRegionFromPdf(arquivo, 1, fileName, 4, destino, paciente, numeroAtendimento);
+            return pDFImgCapture.CaptureRegionFromPdf(arquivo, 1, fileName, 4, destino, paciente, numeroAtendimento);
         }
 
         private Valor getFormatacaoValor()

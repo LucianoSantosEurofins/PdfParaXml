@@ -14,8 +14,9 @@ namespace PdfParaXml.Functions.PDFImgCapture
 {
     public class PDF_ImgCapture
     {
-        public void CaptureRegionFromPdf(string pdfFilePath, int pageNumber, string fileName, int imgPosition, string destinationImagePath, string paciente, string numeroAtendimento)
+        public byte[] CaptureRegionFromPdf(string pdfFilePath, int pageNumber, string fileName, int imgPosition, string destinationImagePath, string paciente, string numeroAtendimento)
         {
+            byte[] img;
             using (var pdfReader = new PdfReader(pdfFilePath))
             {
                 using (var pdfDocument = new PdfDocument(pdfReader))
@@ -32,7 +33,7 @@ namespace PdfParaXml.Functions.PDFImgCapture
                     var imagemBytes = resultadoDeImgExam[imgPosition].imgBytes;
                     // Capture the specified region
                     Bitmap resultImage = ConverterBytesParaImagem(imagemBytes);
-
+                    img = imagemBytes;
                     // Save the region image to a file (or do whatever you need with it)
                     using (MemoryStream ms = new MemoryStream())
                     {
@@ -46,6 +47,7 @@ namespace PdfParaXml.Functions.PDFImgCapture
                     }
                 }
             }
+            return img;
         }
 
         static Image CaptureRegion(Image fullImage, System.Drawing.Rectangle region)

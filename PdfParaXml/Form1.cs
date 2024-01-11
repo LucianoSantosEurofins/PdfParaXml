@@ -4,6 +4,7 @@ using PdfParaXml.Functions;
 using PdfParaXml.Functions.Mendelics;
 using PdfParaXml.Functions.Sollutio;
 using System.Configuration;
+using System.IO;
 
 namespace PdfParaXml
 {
@@ -16,6 +17,11 @@ namespace PdfParaXml
             textBox_LocationMendelics.Text = ConfigurationManager.AppSettings["pastaPadraoMendelics"];
             textBox_LocationSollutio.Text = ConfigurationManager.AppSettings["pastaPadraoSolutio"];
             textBox_XMLLocation.Text = ConfigurationManager.AppSettings["pastaPadraoXML"];
+
+            var path = "PDFs Usados";
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
         }
 
         private void button1_Click(object sender, EventArgs e)
