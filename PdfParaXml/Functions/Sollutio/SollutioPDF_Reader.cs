@@ -140,7 +140,7 @@ namespace PdfParaXml.Functions.Sollutio
                     pedido.SuperExame = superExame;
                     resultados.Pedidos.Add(pedido);
                 }
-            }
+            }//teste
 
             //var listaDeExames = resultados.Pedidos.Select(p => new ModeloDePDFEExemplo { ExameNome = p.SuperExame.ExameNome, fileName = p.fileName }).GroupBy(Ex => Ex.ExameNome).Select(g => g.First()).ToList();
             XmlSerializer xmlSerializer = new XmlSerializer(resultados.GetType());
