@@ -117,141 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="button1.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
-    <value>Zoom</value>
-  </data>
-  <data name="button1.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
-    <value>Flat</value>
-  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="button1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>275, 245</value>
-  </data>
-  <data name="button1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="button1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>247, 47</value>
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="button1.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="button1.Text" xml:space="preserve">
-    <value>Converter para XML</value>
-  </data>
-  <data name="button1.TextImageRelation" type="System.Windows.Forms.TextImageRelation, System.Windows.Forms">
-    <value>TextBeforeImage</value>
-  </data>
-  <data name="&gt;&gt;button1.Name" xml:space="preserve">
-    <value>button1</value>
-  </data>
-  <data name="&gt;&gt;button1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;button1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;button1.ZOrder" xml:space="preserve">
-    <value>11</value>
-  </data>
-  <data name="label1.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 40</value>
-  </data>
-  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>176, 13</value>
-  </data>
-  <data name="label1.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="label1.Text" xml:space="preserve">
-    <value>Localização arqivos PDF Mendelics</value>
-  </data>
-  <data name="&gt;&gt;label1.Name" xml:space="preserve">
-    <value>label1</value>
-  </data>
-  <data name="&gt;&gt;label1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>10</value>
-  </data>
-  <data name="textBox_LocationMendelics.Location" type="System.Drawing.Point, System.Drawing">
-    <value>194, 33</value>
-  </data>
-  <data name="textBox_LocationMendelics.Size" type="System.Drawing.Size, System.Drawing">
-    <value>285, 20</value>
-  </data>
-  <data name="textBox_LocationMendelics.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;textBox_LocationMendelics.Name" xml:space="preserve">
-    <value>textBox_LocationMendelics</value>
-  </data>
-  <data name="&gt;&gt;textBox_LocationMendelics.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;textBox_LocationMendelics.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;textBox_LocationMendelics.ZOrder" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="label2.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 84</value>
-  </data>
-  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>162, 13</value>
-  </data>
-  <data name="label2.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="label2.Text" xml:space="preserve">
-    <value>Localização arqivos PDF Sollutio</value>
-  </data>
-  <data name="&gt;&gt;label2.Name" xml:space="preserve">
-    <value>label2</value>
-  </data>
-  <data name="&gt;&gt;label2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label2.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
-    <value>9</value>
-  </data>
-  <data name="textBox_LocationSollutio.Location" type="System.Drawing.Point, System.Drawing">
-    <value>194, 81</value>
-  </data>
-  <data name="textBox_LocationSollutio.Size" type="System.Drawing.Size, System.Drawing">
-    <value>285, 20</value>
-  </data>
-  <data name="textBox_LocationSollutio.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;textBox_LocationSollutio.Name" xml:space="preserve">
-    <value>textBox_LocationSollutio</value>
-  </data>
-  <data name="&gt;&gt;textBox_LocationSollutio.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;textBox_LocationSollutio.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;textBox_LocationSollutio.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
   <data name="btn_SelectFolderMendelics.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAN
@@ -662,12 +528,6 @@
         k4VmZma2IsTW8GT4MNwA+cV7FtwGt8Vtbq1y1iQLzczMbOUQG8AD4K/hBHgpvAM+Afz5/rqEf2YZ/xv/
         H/6//Dv8uxuobbfx3wv/Dxwx98sHXpS3AAAAAElFTkSuQmCC
 </value>
-  </data>
-  <data name="btn_SelectFolderMendelics.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
-    <value>Stretch</value>
-  </data>
-  <data name="btn_SelectFolderMendelics.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
-    <value>Flat</value>
   </data>
   <data name="btn_SelectFolderMendelics.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -1080,27 +940,6 @@
         H/6//Dv8uxuobbfx3wv/Dxwx98sHXpS3AAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="btn_SelectFolderMendelics.Location" type="System.Drawing.Point, System.Drawing">
-    <value>486, 28</value>
-  </data>
-  <data name="btn_SelectFolderMendelics.Size" type="System.Drawing.Size, System.Drawing">
-    <value>36, 29</value>
-  </data>
-  <data name="btn_SelectFolderMendelics.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;btn_SelectFolderMendelics.Name" xml:space="preserve">
-    <value>btn_SelectFolderMendelics</value>
-  </data>
-  <data name="&gt;&gt;btn_SelectFolderMendelics.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;btn_SelectFolderMendelics.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;btn_SelectFolderMendelics.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
   <data name="btn_SelectFolderSollutio.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAN
@@ -1511,12 +1350,6 @@
         k4VmZma2IsTW8GT4MNwA+cV7FtwGt8Vtbq1y1iQLzczMbOUQG8AD4K/hBHgpvAM+Afz5/rqEf2YZ/xv/
         H/6//Dv8uxuobbfx3wv/Dxwx98sHXpS3AAAAAElFTkSuQmCC
 </value>
-  </data>
-  <data name="btn_SelectFolderSollutio.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
-    <value>Stretch</value>
-  </data>
-  <data name="btn_SelectFolderSollutio.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
-    <value>Flat</value>
   </data>
   <data name="btn_SelectFolderSollutio.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -1929,75 +1762,6 @@
         H/6//Dv8uxuobbfx3wv/Dxwx98sHXpS3AAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="btn_SelectFolderSollutio.Location" type="System.Drawing.Point, System.Drawing">
-    <value>486, 76</value>
-  </data>
-  <data name="btn_SelectFolderSollutio.Size" type="System.Drawing.Size, System.Drawing">
-    <value>36, 29</value>
-  </data>
-  <data name="btn_SelectFolderSollutio.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;btn_SelectFolderSollutio.Name" xml:space="preserve">
-    <value>btn_SelectFolderSollutio</value>
-  </data>
-  <data name="&gt;&gt;btn_SelectFolderSollutio.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;btn_SelectFolderSollutio.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;btn_SelectFolderSollutio.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="label3.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 222</value>
-  </data>
-  <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>257, 13</value>
-  </data>
-  <data name="label3.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="label3.Text" xml:space="preserve">
-    <value>Escolha a pasta onde os arquivos XML serão salvos:</value>
-  </data>
-  <data name="&gt;&gt;label3.Name" xml:space="preserve">
-    <value>label3</value>
-  </data>
-  <data name="&gt;&gt;label3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label3.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="textBox_XMLLocation.Location" type="System.Drawing.Point, System.Drawing">
-    <value>275, 219</value>
-  </data>
-  <data name="textBox_XMLLocation.Size" type="System.Drawing.Size, System.Drawing">
-    <value>204, 20</value>
-  </data>
-  <data name="textBox_XMLLocation.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;textBox_XMLLocation.Name" xml:space="preserve">
-    <value>textBox_XMLLocation</value>
-  </data>
-  <data name="&gt;&gt;textBox_XMLLocation.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;textBox_XMLLocation.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;textBox_XMLLocation.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
   <data name="btn_SelectXMLFolder.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAN
@@ -2409,12 +2173,6 @@
         H/6//Dv8uxuobbfx3wv/Dxwx98sHXpS3AAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="btn_SelectXMLFolder.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
-    <value>Stretch</value>
-  </data>
-  <data name="btn_SelectXMLFolder.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
-    <value>Flat</value>
-  </data>
   <data name="btn_SelectXMLFolder.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAN
@@ -2825,172 +2583,5 @@
         k4VmZma2IsTW8GT4MNwA+cV7FtwGt8Vtbq1y1iQLzczMbOUQG8AD4K/hBHgpvAM+Afz5/rqEf2YZ/xv/
         H/6//Dv8uxuobbfx3wv/Dxwx98sHXpS3AAAAAElFTkSuQmCC
 </value>
-  </data>
-  <data name="btn_SelectXMLFolder.Location" type="System.Drawing.Point, System.Drawing">
-    <value>486, 214</value>
-  </data>
-  <data name="btn_SelectXMLFolder.Size" type="System.Drawing.Size, System.Drawing">
-    <value>36, 29</value>
-  </data>
-  <data name="btn_SelectXMLFolder.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;btn_SelectXMLFolder.Name" xml:space="preserve">
-    <value>btn_SelectXMLFolder</value>
-  </data>
-  <data name="&gt;&gt;btn_SelectXMLFolder.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;btn_SelectXMLFolder.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;btn_SelectXMLFolder.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="checkBox1.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="checkBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>85, 261</value>
-  </data>
-  <data name="checkBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>184, 17</value>
-  </data>
-  <data name="checkBox1.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="checkBox1.Text" xml:space="preserve">
-    <value>Manter Configurações de Pasta ?</value>
-  </data>
-  <data name="&gt;&gt;checkBox1.Name" xml:space="preserve">
-    <value>checkBox1</value>
-  </data>
-  <data name="&gt;&gt;checkBox1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;checkBox1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;checkBox1.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="button2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 1</value>
-  </data>
-  <data name="button2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>17, 10</value>
-  </data>
-  <data name="button2.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="button2.Text" xml:space="preserve">
-    <value>button2</value>
-  </data>
-  <data name="&gt;&gt;button2.Name" xml:space="preserve">
-    <value>button2</value>
-  </data>
-  <data name="&gt;&gt;button2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;button2.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;button2.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 13</value>
-  </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>533, 297</value>
-  </data>
-  <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        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
-        gH/+AYB//wGAf//HwP8=
-</value>
-  </data>
-  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>Conversor de PDF para XML para importação no Pleres</value>
-  </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>Form1</value>
-  </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

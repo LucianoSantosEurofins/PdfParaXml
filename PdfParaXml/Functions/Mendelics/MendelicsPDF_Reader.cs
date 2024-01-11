@@ -17,13 +17,9 @@ namespace PdfParaXml.Functions.Mendelics
     public class MendelicsPDF_Reader
     {
 
-        public void MendelixPDFsTOXML()
+        public void MendelixPDFsTOXML(string pastaRaiz, string localizacaoXML)
         {
             string outputFilePath = Directory.GetCurrentDirectory(); ;
-            //string pastaRaiz = @"C:\Users\d9lb\Desktop\TestesPdf\Mendelics\";
-            string pastaRaiz = @"C:\Users\d9lb\OneDrive - Eurofins\Área de Trabalho\Mendelics2";
-
-
             string[] arquivos = Directory.GetFiles(pastaRaiz, "*.pdf");
             Resultados resultados = new Resultados();
             resultados.Pedidos = new List<Pedido>();
@@ -100,8 +96,6 @@ namespace PdfParaXml.Functions.Mendelics
 
                             if (line.Contains("Método"))
                                 metodo = getMetodo(textConted, reader);
-                                
-                       // }
                     }
                 }
 
@@ -127,7 +121,7 @@ namespace PdfParaXml.Functions.Mendelics
 
                 exame.Metodo = metodo;
 
-                itemDeExame.Nome = "RESSFET";
+                itemDeExame.Nome = "RESSFET"; // Verificar como ficará as variáveis 
 
                 valor = getFormatacaoValor();
                 valor.Text = diagnostico;
@@ -148,7 +142,7 @@ namespace PdfParaXml.Functions.Mendelics
             var fileName = "ResultadosMendelics.XML"; //System.IO.Path.GetFileName("Lote teste").Replace(".pdf", ".XML");
             //CriadorDePlanilha.CriadorDePlanilha criadorDePlanilha = new CriadorDePlanilha.CriadorDePlanilha();
             //criadorDePlanilha.CriarPlanilhaExcel(listaDeExames, "MendelicsExel");
-            using (StreamWriter writer = new StreamWriter(fileName))
+            using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine(localizacaoXML, fileName)))
             {
                 xmlSerializer.Serialize(writer, resultados);
             }

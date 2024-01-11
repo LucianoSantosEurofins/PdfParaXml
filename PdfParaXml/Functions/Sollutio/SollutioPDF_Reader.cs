@@ -6,22 +6,21 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PdfParaXml.TemplateXML;
 using iTextSharp.text.pdf.parser;
 using System.Text.RegularExpressions;
 using PdfParaXml.Functions.PDFImgCapture;
 using System.Drawing;
+using System.Xml.Serialization;
 
 namespace PdfParaXml.Functions.Sollutio
 {
     public class SollutioPDF_Reader
     {
-        public void SollutioPDFToXML()
+        public void SollutioPDFToXML(string pastaRaiz, string localizacaoXML)
         {
             string outputFilePath = Directory.GetCurrentDirectory(); ;
             //string pastaRaiz = @"C:\Users\d9lb\Desktop\TestesPdf\Mendelics\";
-            string pastaRaiz = @"C:\Users\d9lb\OneDrive - Eurofins\Área de Trabalho\TestesPdf\Sollutio";
-
+            //string pastaRaiz = @"C:\Users\d9lb\OneDrive - Eurofins\Área de Trabalho\TestesPdf\Sollutio";
 
             string[] arquivos = Directory.GetFiles(pastaRaiz, "*.pdf");
             Resultados resultados = new Resultados();
@@ -42,9 +41,6 @@ namespace PdfParaXml.Functions.Sollutio
 
                 //XML Pardini
 
-                //Capturar resultado de imagem
-                SaveExamImageResult(arquivo);
-
                 string nome = "";
                 string sexo = "";
                 string nomeExame = "";
@@ -54,9 +50,11 @@ namespace PdfParaXml.Functions.Sollutio
                 string cliente = "";
                 string codExterno = "";
                 string dtAbertura = "";
-
+                string material = "";
                 string metodo = "";
                 string interpretacao = "";
+                string resultadoTxt = "";
+                string bandeamento = "";
 
                 using (PdfReader reader = new PdfReader(arquivo))
                 {
@@ -95,16 +93,112 @@ namespace PdfParaXml.Functions.Sollutio
                         if (line.Contains("Interpretação:"))
                             interpretacao = getInterPretacao(textConted, reader);
 
+                        if (line.Contains("Resultado:"))
+                            resultadoTxt = getResultado(line);
+
+                        if (line.Contains("Método:"))
+                            material = $"{pdfLines[pdfLines.IndexOf(line) - 1]} {pdfLines[pdfLines.IndexOf(line) + 1]}";
+
+                        if (line.Contains("Bandeamento:"))
+                            bandeamento = pdfLines[pdfLines.IndexOf(line) + 1];
                     }
+
+                    //Capturar resultado de imagem
+                    SaveExamImageResult(arquivo, CreateImgResultDirectory(localizacaoXML), nome, codExterno);
+
+                    resultados.Protocolo = 1;
+                    resultados.ID = 200;
+
+                    controleDeLote.Emissor = "Aplicacao pdf para xml centro de genomas";
+                    controleDeLote.DataEmissao = DateTime.Now.ToString("dd/MM/yyyy");
+                    controleDeLote.HoraEmissao = DateTime.Now.ToString("HH:mm:ss");
+                    controleDeLote.CodLab = cliente;
+
+                    pedido.fileName = arquivo;
+                    pedido.CodPedApoio = requisicao; //Provavelmente precisara ser ajustado futuramente
+                    pedido.CodPedLab = codExterno;
+                    pedido.Nome = nome;
+
+                    superExame.MaterialNome = material;
+                    superExame.ExameNome = nomeExame;
+                    superExame.CodExmApoio = "Teste exameApoio";
+                    superExame.CodigoFormato = 1;
+
+                    exame.Metodo = metodo;
+
+                    itemDeExame.Nome = "RESSCARIOTIPO";
+
+                    valor = getFormatacaoValor();
+                    valor.Text = resultadoTxt;
+
+                    resultados.ControleDeLote = controleDeLote;
+                    conteudo.Valor = valor;
+                    resultado.Conteudo = conteudo;
+                    itemDeExame.Resultado = resultado;
+                    exame.ItemDeExame = itemDeExame;
+                    superExame.Exame = exame;
+                    pedido.SuperExame = superExame;
+                    resultados.Pedidos.Add(pedido);
                 }
+            }
+
+            //var listaDeExames = resultados.Pedidos.Select(p => new ModeloDePDFEExemplo { ExameNome = p.SuperExame.ExameNome, fileName = p.fileName }).GroupBy(Ex => Ex.ExameNome).Select(g => g.First()).ToList();
+            XmlSerializer xmlSerializer = new XmlSerializer(resultados.GetType());
+            xmlSerializer.Serialize(Console.Out, resultados);
+            var fileName = "ResultadosSollutio.XML"; //System.IO.Path.GetFileName("Lote teste").Replace(".pdf", ".XML");
+            //CriadorDePlanilha.CriadorDePlanilha criadorDePlanilha = new CriadorDePlanilha.CriadorDePlanilha();
+            //criadorDePlanilha.CriarPlanilhaExcel(listaDeExames, "MendelicsExel");
+            using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine(localizacaoXML,fileName)))
+            {
+                xmlSerializer.Serialize(writer, resultados);
             }
         }
 
-        private void SaveExamImageResult(string arquivo)
+        private string CreateImgResultDirectory(string pastaRaiz)
+        {
+            var path = System.IO.Path.Combine(pastaRaiz, "ResultadosDeImagemSollutio");
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            return path;
+        }
+
+        private void SaveExamImageResult(string arquivo, string destino, string paciente, string numeroAtendimento)
         {
             PDF_ImgCapture pDFImgCapture = new PDF_ImgCapture();
             var fileName = System.IO.Path.GetFileNameWithoutExtension(arquivo);
-            pDFImgCapture.CaptureRegionFromPdf(arquivo, 1, fileName, 4);
+            pDFImgCapture.CaptureRegionFromPdf(arquivo, 1, fileName, 4, destino, paciente, numeroAtendimento);
+        }
+
+        private Valor getFormatacaoValor()
+        {
+            Valor valor = new Valor();
+            valor.CasasDecimais = 0;
+            valor.TamanhoMaximo = 245;
+            valor.Tipo = "alfanumerico";
+            valor.IdValor = 1;
+            valor.CasasDecimais = 0;
+            valor.TamanhoMaximo = 245;
+            valor.Tipo = "alfanumerico";
+            valor.IdValor = 1;
+            return valor;
+        }
+
+        private string getResultado(string pdfContend)
+        {
+            
+                string metodoPatern = @"(?<=Resultado:).*$";
+                Match match = Regex.Match(pdfContend, metodoPatern);
+
+                if (match.Success)
+                {
+                    return match.Value;
+                }
+                else
+                {
+                    return "";
+                }
         }
 
         private string getInterPretacao(string pdfContend, PdfReader reader)
