@@ -120,12 +120,13 @@ namespace PdfParaXml.Functions.Sollutio
 
                     pedido.fileName = arquivo;
                     pedido.CodPedApoio = requisicao; //Provavelmente precisara ser ajustado futuramente
-                    pedido.CodPedLab = codExterno;
+                    pedido.CodPedLab = $"002{codExterno}"; //Colocar 002 no começo ;
                     pedido.Nome = nome;
 
                     superExame.MaterialNome = material;
-                    superExame.ExameNome = nomeExame;
-                    superExame.CodExmApoio = "Teste exameApoio";
+                    var dadosExame = getExamesDict();
+                    superExame.ExameNome = dadosExame[nomeExame][1]; // ajustar para CARIOTIPO DE SANGUE PERIFÉRICO COM BANDEAMENTO G
+                    superExame.CodExmApoio = $"{dadosExame[nomeExame][1]}|{dadosExame[nomeExame][2]}|1";// Concatenar nome do exame | abreviação | 1;
                     superExame.CodigoFormato = 1;
                     
 
@@ -174,6 +175,18 @@ namespace PdfParaXml.Functions.Sollutio
             {
                 xmlSerializer.Serialize(writer, resultados);
             }
+        }
+
+        private Dictionary<string, List<string>> getExamesDict()
+        {
+            var examsDict = new Dictionary<string, List<string>>();
+            examsDict.Add("CARIÓTIPO CONSTITUCIONAL", new List<string>() { "BANDGSP", "CARIOTIPO DE SANGUE PERIFÉRICO COM BANDEAMENTO G", "CG_CONSTCATG" });              
+            examsDict.Add("2", new List<string>() { "CARIHEMA", "CARIOTIPO DE DOENÇAS HEMATOLÓGICAS", "CARIHEMA" });             
+            examsDict.Add("3", new List<string>() { "BANDGMO", "CARIÓTIPO DE MEDULA ÓSSEA COM BANDEAMENTO G", "BANDGMO" });              
+            examsDict.Add("4", new List<string>() { "DUFFY", "GENOTIPAGEM SISTEMA FY(DUFFY)", "DUFFY" });             
+            examsDict.Add("5", new List<string>() { "BANDG100", "CARIÓTIPO DE SANGUE PERIFÉRICO(100 CÉLULAS)", "CG_100C" });
+            examsDict.Add("6", new List<string>() { "BANDG50", "CARIÓTIPO DE SANGUE PERIFÉRICO(50 CÉLULAS)", "CG_MOSAI" });
+            return examsDict;
         }
 
         private string CreatePdfsDir(string pastaRaiz)
