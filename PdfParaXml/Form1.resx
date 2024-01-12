@@ -2854,7 +2854,7 @@
     <value>85, 261</value>
   </data>
   <data name="checkBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>184, 17</value>
+    <value>191, 21</value>
   </data>
   <data name="checkBox1.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -2878,7 +2878,7 @@
     <value>0, 1</value>
   </data>
   <data name="button2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>17, 10</value>
+    <value>10, 10</value>
   </data>
   <data name="button2.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>

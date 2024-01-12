@@ -4,12 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using iTextSharp.text.pdf.parser;
 using System.Text.RegularExpressions;
 using PdfParaXml.Functions.PDFImgCapture;
-using System.Drawing;
 using System.Xml.Serialization;
 
 namespace PdfParaXml.Functions.Sollutio
