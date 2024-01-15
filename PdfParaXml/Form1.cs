@@ -5,6 +5,7 @@ using PdfParaXml.Functions.Mendelics;
 using PdfParaXml.Functions.Sollutio;
 using System.Configuration;
 using System.IO;
+using PdfParaXml.Functions.IPOG;
 
 namespace PdfParaXml
 {
@@ -28,8 +29,11 @@ namespace PdfParaXml
         {
             MendelicsPDF_Reader mendelicsPDF_Reader = new MendelicsPDF_Reader();
             SollutioPDF_Reader sollutioPDF_Reader = new SollutioPDF_Reader();
+            IPOGPDF_Reader iPOGPDF_Reader = new IPOGPDF_Reader();
+
             var sollutioLocation = textBox_LocationSollutio.Text;
             var mendelicsLocation = textBox_LocationMendelics.Text;
+            var IpogLocation = textBox_LocationIPOG.Text;
             var xmlLocation = textBox_XMLLocation.Text;
 
             if (!string.IsNullOrEmpty(sollutioLocation) && !string.IsNullOrEmpty(xmlLocation))
@@ -37,6 +41,9 @@ namespace PdfParaXml
 
             if (!string.IsNullOrEmpty(mendelicsLocation) && !string.IsNullOrEmpty(xmlLocation))
                 mendelicsPDF_Reader.MendelixPDFsTOXML(mendelicsLocation, xmlLocation);
+
+            if (!string.IsNullOrEmpty(IpogLocation) && !string.IsNullOrEmpty(xmlLocation))
+                iPOGPDF_Reader.IPOGPdfToXML(IpogLocation, xmlLocation);
 
             if (checkBox1.Checked)
             {
@@ -84,6 +91,25 @@ namespace PdfParaXml
 
                     // Faça algo com o caminho da pasta, se necessário
                     textBox_LocationSollutio.Text = caminhoPasta;
+                }
+            }
+        }
+
+        private void btn_SelectFolderIPOG_Click(object sender, EventArgs e)
+        {
+            using (FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog())
+            {
+                // Define o título do diálogo
+                folderBrowserDialog.Description = "Selecione uma pasta com os PDFs IPOG";
+
+                // Exibe o diálogo e verifica se o usuário clicou em OK
+                if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Obtém o caminho da pasta selecionada
+                    string caminhoPasta = folderBrowserDialog.SelectedPath;
+
+                    // Faça algo com o caminho da pasta, se necessário
+                    textBox_LocationIPOG.Text = caminhoPasta;
                 }
             }
         }

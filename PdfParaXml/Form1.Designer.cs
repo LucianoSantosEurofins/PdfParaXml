@@ -43,8 +43,8 @@ namespace PdfParaXml
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button2 = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button3 = new System.Windows.Forms.Button();
+            this.textBox_LocationIPOG = new System.Windows.Forms.TextBox();
+            this.btn_SelectFolderIPOG = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -137,20 +137,20 @@ namespace PdfParaXml
             resources.ApplyResources(this.label4, "label4");
             this.label4.Name = "label4";
             // 
-            // textBox1
+            // textBox_LocationIPOG
             // 
-            resources.ApplyResources(this.textBox1, "textBox1");
-            this.textBox1.Name = "textBox1";
+            resources.ApplyResources(this.textBox_LocationIPOG, "textBox_LocationIPOG");
+            this.textBox_LocationIPOG.Name = "textBox_LocationIPOG";
             // 
-            // button3
+            // btn_SelectFolderIPOG
             // 
-            this.button3.BackColor = System.Drawing.Color.Transparent;
-            resources.ApplyResources(this.button3, "button3");
-            this.button3.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button3.FlatAppearance.BorderSize = 0;
-            this.button3.Name = "button3";
-            this.button3.UseVisualStyleBackColor = false;
-            this.button3.Click += new System.EventHandler(this.btn_SelectFolderSollutio_Click);
+            this.btn_SelectFolderIPOG.BackColor = System.Drawing.Color.Transparent;
+            resources.ApplyResources(this.btn_SelectFolderIPOG, "btn_SelectFolderIPOG");
+            this.btn_SelectFolderIPOG.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_SelectFolderIPOG.FlatAppearance.BorderSize = 0;
+            this.btn_SelectFolderIPOG.Name = "btn_SelectFolderIPOG";
+            this.btn_SelectFolderIPOG.UseVisualStyleBackColor = false;
+            this.btn_SelectFolderIPOG.Click += new System.EventHandler(this.btn_SelectFolderIPOG_Click);
             // 
             // Form1
             // 
@@ -160,11 +160,11 @@ namespace PdfParaXml
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btn_SelectXMLFolder);
-            this.Controls.Add(this.button3);
+            this.Controls.Add(this.btn_SelectFolderIPOG);
             this.Controls.Add(this.btn_SelectFolderSollutio);
             this.Controls.Add(this.btn_SelectFolderMendelics);
             this.Controls.Add(this.textBox_XMLLocation);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.textBox_LocationIPOG);
             this.Controls.Add(this.textBox_LocationSollutio);
             this.Controls.Add(this.textBox_LocationMendelics);
             this.Controls.Add(this.label4);
@@ -192,8 +192,8 @@ namespace PdfParaXml
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.TextBox textBox_LocationIPOG;
+        private System.Windows.Forms.Button btn_SelectFolderIPOG;
     }
 }
 
