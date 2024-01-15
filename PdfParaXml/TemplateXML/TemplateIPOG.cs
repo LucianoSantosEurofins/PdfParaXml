@@ -84,7 +84,7 @@ namespace PdfParaXml.TemplateXML
             public string Metodo { get; set; }
 
             [XmlElement("ItemDeExame")]
-            public ItemDeExame ItemDeExame { get; set; }
+            public List<ItemDeExame> ItemDeExame { get; set; }
         }
 
         public class ItemDeExame

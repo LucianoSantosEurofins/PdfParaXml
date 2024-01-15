@@ -64,11 +64,12 @@ namespace PdfParaXml.Functions.IPOG
                             nome = pdfLines[10];
                             dataNascimento = pdfLines[8];
                             idade = pdfLines[9];
-                            codExterno = pdfLines[14];
+                            codExterno = pdfLines[14]; 
+                            nomeExame = pdfLines[16];
                         }
 
                         if (line.Contains("MATERIAL"))
-                            material = getMaterial(line);
+                            material = getMaterial(line).Trim();
 
                         if (line.Contains("MÉTODO"))
                             metodo = getMetodo(line);
@@ -91,8 +92,9 @@ namespace PdfParaXml.Functions.IPOG
                 pedido.Nome = nome;
 
                 superExame.MaterialNome = material;
-                superExame.ExameNome = nomeExame;
-                superExame.CodExmApoio = "Teste exameApoio";
+                var dadosExame = getExamesDict();
+                superExame.ExameNome = dadosExame[nomeExame][1];
+                superExame.CodExmApoio = $"{dadosExame[nomeExame][1]}|{dadosExame[nomeExame][2]}|1";
                 superExame.CodigoFormato = 1;
 
                 exame.Metodo = metodo;
@@ -106,7 +108,7 @@ namespace PdfParaXml.Functions.IPOG
                 conteudo.Valor = valor;
                 resultado.Conteudo = conteudo;
                 itemDeExame.Resultado = resultado;
-                exame.ItemDeExame = itemDeExame;
+                exame.ItemDeExame = getResultadosComVariaveisDefinidas(dadosExame[nomeExame][2]);
                 superExame.Exame = exame;
                 pedido.SuperExame = superExame;
                 resultados.Pedidos.Add(pedido);
@@ -126,6 +128,64 @@ namespace PdfParaXml.Functions.IPOG
             }
         }
 
+        private List<TemplateIPOG.ItemDeExame> getResultadosComVariaveisDefinidas(string exame, params string[] resultados)
+        {
+            var itens = new List<TemplateIPOG.ItemDeExame>();
+            switch (exame)
+            {
+                case "DST I":
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CLTA" });
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "NEGO" });
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "MYGE" });
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "MYHO" });
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "TRVA" });
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "URUR" });
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "URP" });
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "NOTA" });
+                    break;
+                case "HPVAB":
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CAPTURA" });
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "RLUPC1" });
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "RLUPC2" });
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CONCLUS" });
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "NOTA" });
+                    break;
+                case "HPVB":
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CAPTURA" });
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "RLUPC1" });
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CONCL" });
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "NOTA" });
+                    break;
+            }
+
+            return itens;
+        }
+
+        private string[] getDSTResults(string PDFcontend)
+        {
+            return null;
+        }
+
+        private string[] getHPVABResults(string PDFcontend)
+        {
+            return null;
+        }
+
+        private string[] getHPVB(string PDFcontend)
+        {
+            return null;
+        }
+
+        private Dictionary<string, List<string>> getExamesDict()
+        {
+            var examsDict = new Dictionary<string, List<string>>();
+            examsDict.Add("PAINEL DE IST I (CT/NG/MHOM/MGEN/UUREA/UPAR/TVAG)", new List<string>() { "DST", "PAINEL PARA INFECÇÕES SEXUALMENTE TRANSMISSÍVEIS (ISTS)", "DST I", "CLTA", "NEGO", "MYGE", "MYHO", "TRVA", "URUR", "URP", "NOTA" });
+            examsDict.Add("CAPTURA HÍBRIDA PARA HPV ALTO E BAIXO RISCO", new List<string>() { "HPVCAPAB", "HPV CAPTURA HÍBRIDA (ALTO E BAIXO RISCO)", "HPVAB", "CAPTURA", "RLUPC1", "RLUPC2", "CONCLUS", "NOTA" });
+            examsDict.Add("CAPTURA HÍBRIDA PARA HPV ALTO RISCO", new List<string>() { "HPVCAPA", "HPV CAPTURA HÍBRIDA (ALTO RISCO)", "HPVB", "CAPTURA", "RLUPC1", "CONCL", "NOTA"});
+            examsDict.Add("A definir", new List<string>() { "CLAGONCH", "CTNG - CAPTURA HÍBRIDA", "CLAGONCH" });
+            return examsDict;
+        }
+
         public class ModeloDePDFEExemplo
         {
             public string ExameNome;
@@ -134,7 +194,7 @@ namespace PdfParaXml.Functions.IPOG
 
         private string getMaterial(string pdfContend)
         {
-            string metodoPatern = @"(?<=MATERIAL:).*$";
+            string metodoPatern = @"(?<=:).*$";
             Match match = Regex.Match(pdfContend.Trim(), metodoPatern);
 
             if (match.Success)
