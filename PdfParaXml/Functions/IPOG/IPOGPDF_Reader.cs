@@ -149,13 +149,12 @@ namespace PdfParaXml.Functions.IPOG
 
         private string getMetodo(string pdfContend)
         {
-            string metodoPatern = @"(?<=MÉTODO:).*$";
-            var nomalizarMetodo = Regex.Replace(pdfContend, @"\s","");
-            Match match = Regex.Match(nomalizarMetodo, metodoPatern);
+            string metodoPatern = @"(?<=MÉTODO).*$";
+            Match match = Regex.Match(pdfContend, metodoPatern);
 
             if (match.Success)
             {
-                return match.Value;
+                return match.Value.Replace(":", "").Trim();
             }
             else
             {
