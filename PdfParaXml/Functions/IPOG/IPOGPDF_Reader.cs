@@ -50,11 +50,13 @@ namespace PdfParaXml.Functions.IPOG
                 string metodo = "";
                 string idade = "";
                 string codExterno = "";
+                string resultadoSemTratamento = "";
 
                 using (PdfReader reader = new PdfReader(arquivo))
                 {
 
                     var textConted = getPdfText(reader);
+
                     var pdfLines = textConted.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 
                     foreach (var line in pdfLines)
@@ -72,7 +74,10 @@ namespace PdfParaXml.Functions.IPOG
                             material = getMaterial(line).Trim();
 
                         if (line.Contains("MÉTODO"))
+                        {
                             metodo = getMetodo(line);
+                            resultadoSemTratamento = getResultadoSemTratamento(textConted, reader, metodo);
+                        }
                     }
                 }
 
@@ -159,6 +164,38 @@ namespace PdfParaXml.Functions.IPOG
             }
 
             return itens;
+        }
+
+        private string getResultadoSemTratamento(string pdfContend, PdfReader reader, string remover)
+        {
+            string startWord = "MÉTODO";
+            string endWord = "VALOR DE REFERÊNCIA";
+            pdfContend = getPdfTextLastPage(reader);
+            int startIndex = pdfContend.IndexOf(startWord);
+            int endIndex = pdfContend.IndexOf(endWord) == -1 ? pdfContend.IndexOf("VALORES DE REFERÊNCIA") : pdfContend.IndexOf(endWord);
+
+            if (startIndex != -1 && endIndex != -1)
+            {
+                int startIndexToUse = startIndex + startWord.Length;
+                string result = pdfContend.Substring(startIndexToUse, endIndex - startIndexToUse).Trim();
+                return result.Replace(remover, "");
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        private string getPdfTextLastPage(PdfReader pdfReader)
+        {
+            string text = "";
+
+            for (int i = 1; i <= pdfReader.NumberOfPages; i++)
+            {
+                text = PdfTextExtractor.GetTextFromPage(pdfReader, i);
+            }
+
+            return text;
         }
 
         private string[] getDSTResults(string PDFcontend)
