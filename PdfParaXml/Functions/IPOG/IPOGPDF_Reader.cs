@@ -48,17 +48,30 @@ namespace PdfParaXml.Functions.IPOG
                 string diagnostico = "";
                 string exameYT = "";
                 string metodo = "";
+                string idade = "";
+                string codExterno = "";
 
                 using (PdfReader reader = new PdfReader(arquivo))
                 {
-                    //using (StreamWriter writer = new StreamWriter(outputFilePath))
-                    //{
+
                     var textConted = getPdfText(reader);
                     var pdfLines = textConted.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 
                     foreach (var line in pdfLines)
                     {
+                        if (line.Contains("Nome"))
+                        {
+                            nome = pdfLines[10];
+                            dataNascimento = pdfLines[8];
+                            idade = pdfLines[9];
+                            codExterno = pdfLines[14];
+                        }
 
+                        if (line.Contains("MATERIAL"))
+                            material = getMaterial(line);
+
+                        if (line.Contains("MÉTODO"))
+                            metodo = getMetodo(line);
                     }
                 }
 
@@ -74,7 +87,7 @@ namespace PdfParaXml.Functions.IPOG
 
                 pedido.fileName = arquivo;
                 pedido.CodPedApoio = exameYT; //Provavelmente precisara ser ajustado futuramente
-                pedido.CodPedLab = consultarBancoDeDados.GetNumAtendimento(nome).nome;
+                pedido.CodPedLab = codExterno;
                 pedido.Nome = nome;
 
                 superExame.MaterialNome = material;
@@ -117,6 +130,37 @@ namespace PdfParaXml.Functions.IPOG
         {
             public string ExameNome;
             public string fileName;
+        }
+
+        private string getMaterial(string pdfContend)
+        {
+            string metodoPatern = @"(?<=MATERIAL:).*$";
+            Match match = Regex.Match(pdfContend.Trim(), metodoPatern);
+
+            if (match.Success)
+            {
+                return match.Value;
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        private string getMetodo(string pdfContend)
+        {
+            string metodoPatern = @"(?<=MÉTODO:).*$";
+            var nomalizarMetodo = Regex.Replace(pdfContend, @"\s","");
+            Match match = Regex.Match(nomalizarMetodo, metodoPatern);
+
+            if (match.Success)
+            {
+                return match.Value;
+            }
+            else
+            {
+                return "";
+            }
         }
 
         static void MoverArquivos(string origem, string destino, string[] arquivos)
