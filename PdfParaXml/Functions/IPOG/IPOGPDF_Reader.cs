@@ -10,7 +10,6 @@ using iTextSharp.text.pdf.parser;
 using PdfParaXml.TemplateXML;
 using System.Xml.Serialization;
 using PdfParaXml.Functions.CriadorDePlanilha;
-
 using static PdfParaXml.TemplateXML.TemplateIPOG;
 
 namespace PdfParaXml.Functions.IPOG
@@ -138,14 +137,16 @@ namespace PdfParaXml.Functions.IPOG
         {
             string padrao = @":\s*RESULTADOS\s*:";
 
-            MatchCollection correspondencias = Regex.Matches(texto, padrao);
+            texto = texto.Replace("\r\n", " ").Replace("\n", " ").Replace("\r", " ");
 
+            MatchCollection correspondencias = Regex.Matches(texto, padrao);
+            string teste = "";
             foreach (Match correspondencia in correspondencias)
             {
-                var teste = correspondencia.Value;
+                 teste = correspondencia.Value;
             }
             // Substituir quebras de linha por espaços
-            return texto.Replace("\r\n", " ").Replace("\n", " ").Replace("\r", " ");
+            return texto.Replace(teste, "").Trim();
         }
 
         private List<TemplateIPOG.ItemDeExame> getResultadosComVariaveisDefinidas(string exame,string resultadoTxt, params string[] resultados)
