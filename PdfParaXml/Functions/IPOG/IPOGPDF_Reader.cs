@@ -76,7 +76,8 @@ namespace PdfParaXml.Functions.IPOG
                         if (line.Contains("MÉTODO"))
                         {
                             metodo = getMetodo(line);
-                            resultadoSemTratamento = getResultadoSemTratamento(textConted, reader, metodo);
+                            resultadoSemTratamento = getResultadoSemTratamento(textConted, reader, metodo).Trim();
+                            var teste = RemoverQuebrasDeLinha(resultadoSemTratamento);
                         }
                     }
                 }
@@ -104,7 +105,7 @@ namespace PdfParaXml.Functions.IPOG
 
                 exame.Metodo = metodo;
 
-                itemDeExame.Nome = "RESSFET"; // Verificar como ficará as variáveis 
+                //itemDeExame.Nome = "RESSFET"; // Verificar como ficará as variáveis 
 
                 valor = getFormatacaoValor();
                 valor.Text = diagnostico;
@@ -113,7 +114,7 @@ namespace PdfParaXml.Functions.IPOG
                 conteudo.Valor = valor;
                 resultado.Conteudo = conteudo;
                 itemDeExame.Resultado = resultado;
-                exame.ItemDeExame = getResultadosComVariaveisDefinidas(dadosExame[nomeExame][2]);
+                exame.ItemDeExame = getResultadosComVariaveisDefinidas(dadosExame[nomeExame][2], resultadoSemTratamento);
                 superExame.Exame = exame;
                 pedido.SuperExame = superExame;
                 resultados.Pedidos.Add(pedido);
@@ -133,7 +134,21 @@ namespace PdfParaXml.Functions.IPOG
             }
         }
 
-        private List<TemplateIPOG.ItemDeExame> getResultadosComVariaveisDefinidas(string exame, params string[] resultados)
+        private string RemoverQuebrasDeLinha(string texto)
+        {
+            string padrao = @":\s*RESULTADOS\s*:";
+
+            MatchCollection correspondencias = Regex.Matches(texto, padrao);
+
+            foreach (Match correspondencia in correspondencias)
+            {
+                var teste = correspondencia.Value;
+            }
+            // Substituir quebras de linha por espaços
+            return texto.Replace("\r\n", " ").Replace("\n", " ").Replace("\r", " ");
+        }
+
+        private List<TemplateIPOG.ItemDeExame> getResultadosComVariaveisDefinidas(string exame,string resultadoTxt, params string[] resultados)
         {
             var itens = new List<TemplateIPOG.ItemDeExame>();
             switch (exame)
@@ -145,7 +160,7 @@ namespace PdfParaXml.Functions.IPOG
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "MYHO" });
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "TRVA" });
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "URUR" });
-                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "URP" });
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "URP"  });
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "NOTA" });
                     break;
                 case "HPVAB":
@@ -162,7 +177,6 @@ namespace PdfParaXml.Functions.IPOG
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "NOTA" });
                     break;
             }
-
             return itens;
         }
 
