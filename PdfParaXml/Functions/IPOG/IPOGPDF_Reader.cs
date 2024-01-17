@@ -76,7 +76,9 @@ namespace PdfParaXml.Functions.IPOG
                         {
                             metodo = getMetodo(line);
                             resultadoSemTratamento = getResultadoSemTratamento(textConted, reader, metodo).Trim();
-                            var teste = RemoverQuebrasDeLinha(resultadoSemTratamento);
+                            string teste;
+                            if (nomeExame.Contains("PAINEL DE IST I (CT/NG/MHOM/MGEN/UUREA/UPAR/TVAG)"))
+                                 teste = RemoverQuebrasDeLinha(resultadoSemTratamento, nome);
                         }
                     }
                 }
@@ -133,20 +135,110 @@ namespace PdfParaXml.Functions.IPOG
             }
         }
 
-        private string RemoverQuebrasDeLinha(string texto)
+        static int[] EncontrarPosicoes(string texto, string palavra)
+        {
+            // Utiliza a classe Regex para encontrar todas as ocorrências da palavra no texto
+            MatchCollection matches = Regex.Matches(texto, palavra, RegexOptions.IgnoreCase);
+
+            // Cria um array para armazenar as posições iniciais das ocorrências
+            int[] posicoes = new int[matches.Count];
+
+            // Preenche o array com as posições iniciais das ocorrências
+            for (int i = 0; i < matches.Count; i++)
+            {
+                posicoes[i] = matches[i].Index + 8;
+            }
+
+            return posicoes;
+        }
+
+        private string RemoverQuebrasDeLinha(string texto, string nomePaciente)
         {
             string padrao = @":\s*RESULTADOS\s*:";
-
-            texto = texto.Replace("\r\n", " ").Replace("\n", " ").Replace("\r", " ");
-
-            MatchCollection correspondencias = Regex.Matches(texto, padrao);
+            texto = texto.Replace("\r\n", " ").Replace("\n", " ").Replace("\r", " ").Trim();
+            var posicaoNegativos = EncontrarPosicoes(texto, "NEGATIVO");
+            var posicaoPositivos = EncontrarPosicoes(texto, "POSITIVO");
+            var testando = CaptureWordsAfterPosition(texto, nomePaciente);
             string teste = "";
+            MatchCollection correspondencias = Regex.Matches(texto, padrao);
+
             foreach (Match correspondencia in correspondencias)
             {
                  teste = correspondencia.Value;
             }
-            // Substituir quebras de linha por espaços
-            return texto.Replace(teste, "").Trim();
+
+            return string.IsNullOrEmpty(teste) ? texto : texto.Replace(teste, "");
+        }
+
+        private string[] CaptureWordsAfterPosition(string txtContend, string NomePaciente)
+        {
+            // Verifica se a posição fornecida é válida
+
+            var resultados = txtContend.Split(':').Where(s => !string.IsNullOrEmpty(s)).ToList();
+            var listaOrdenada = new List<ObjResultado>();
+            foreach (var resultado in resultados)
+            {
+                string value = "NEGATIVO";
+                string Ignore = "RESULT*";
+                MatchCollection matchCollection = Regex.Matches(resultado, value);
+                var proximaIteracao = Regex.Match(resultado, Ignore).Success;
+
+                if (proximaIteracao)
+                    continue;
+
+                if (resultado.Contains("NEGATIVO"))
+                {
+                    var result = new ObjResultado();
+                    result.nome = resultados[resultados.IndexOf(resultado) - 1].Replace("POSITIVO", "").Replace("NEGATIVO", ""); ;
+                    result.resultado = "NEGATIVO";
+                    if (matchCollection.Count >= 2)
+                    {
+                        var posicaoResultadoNegativo = resultado.IndexOf("NEGATIVO");
+                        var posicaoResultadoPositivo = resultado.IndexOf("POSITIVO");
+
+                        if (posicaoResultadoNegativo > posicaoResultadoPositivo)
+                        {
+                            result.resultado = "NEGATIVO";
+                        }
+                        else if (posicaoResultadoNegativo < posicaoResultadoPositivo)
+                        {
+                            result.resultado = "POSITIVO";
+                        }
+                    }
+                    listaOrdenada.Add(result);
+                }
+
+                if (resultado.Contains("POSITIVO"))
+                {
+                    var result = new ObjResultado();
+                    result.nome = resultados[resultados.IndexOf(resultado) - 1].Replace("POSITIVO", "").Replace("NEGATIVO", "");
+                    result.resultado = "POSITIVO";
+                    if (matchCollection.Count >= 2)
+                    {
+                        var posicaoResultadoNegativo = resultado.IndexOf("NEGATIVO");
+                        var posicaoResultadoPositivo = resultado.IndexOf("POSITIVO");
+
+                        if (posicaoResultadoNegativo > posicaoResultadoPositivo)
+                        {
+                            result.resultado = "NEGATIVO";
+                        }
+                        else if (posicaoResultadoNegativo < posicaoResultadoPositivo)
+                        {
+                            result.resultado = "POSITIVO";
+                        }
+                    }
+                    listaOrdenada.Add(result);
+                }
+            }
+
+            return null;
+        }
+
+        private class ObjResultado
+        {
+            public string variavel { get; set; }
+            public string resultado { get; set; }
+            public string nome { get; set; }
         }
 
         private List<TemplateIPOG.ItemDeExame> getResultadosComVariaveisDefinidas(string exame,string resultadoTxt, params string[] resultados)
