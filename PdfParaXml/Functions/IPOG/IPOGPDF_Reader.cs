@@ -95,6 +95,14 @@ namespace PdfParaXml.Functions.IPOG
                                 exame1.ItemDeExame = getResultadosComVariaveisDefinidas(nomeDoExame, resultadoComTratamento, nome);
                             }
 
+                            if (nomeExame.Contains("CAPTURA HÍBRIDA PARA HPV ALTO RISCO"))
+                            {
+                                var dadosExames = getExamesDict();
+                                var nomeDoExame = dadosExames[nomeExame][2];
+                                var resultadoComTratamento = RemoverQuebrasDeLinha(resultadoSemTratamento, nome);
+                                exame1.ItemDeExame = getResultadosComVariaveisDefinidas(nomeDoExame, resultadoComTratamento, nome);
+                            }
+
                         }
                     }
                 }
@@ -122,8 +130,6 @@ namespace PdfParaXml.Functions.IPOG
 
                 exame.Metodo = metodo;
 
-                //itemDeExame.Nome = "RESSFET"; // Verificar como ficará as variáveis 
-
                 valor = getFormatacaoValor();
                 valor.Text = diagnostico;
 
@@ -137,7 +143,7 @@ namespace PdfParaXml.Functions.IPOG
                 resultados.Pedidos.Add(pedido);
             }
 
-            var listaDeExames = resultados.Pedidos.Select(p => new ModeloDePDFEExemplo { ExameNome = p.SuperExame.ExameNome, fileName = p.fileName }).GroupBy(Ex => Ex.ExameNome).Select(g => g.First()).ToList();
+            //var listaDeExames = resultados.Pedidos.Select(p => new ModeloDePDFEExemplo { ExameNome = p.SuperExame.ExameNome, fileName = p.fileName }).GroupBy(Ex => Ex.ExameNome).Select(g => g.First()).ToList();
             XmlSerializer xmlSerializer = new XmlSerializer(resultados.GetType());
             xmlSerializer.Serialize(Console.Out, resultados);
             var fileName = "ResultadosIPOG.XML"; //System.IO.Path.GetFileName("Lote teste").Replace(".pdf", ".XML");
@@ -149,23 +155,6 @@ namespace PdfParaXml.Functions.IPOG
             {
                 xmlSerializer.Serialize(writer, resultados);
             }
-        }
-
-        static int[] EncontrarPosicoes(string texto, string palavra)
-        {
-            // Utiliza a classe Regex para encontrar todas as ocorrências da palavra no texto
-            MatchCollection matches = Regex.Matches(texto, palavra, RegexOptions.IgnoreCase);
-
-            // Cria um array para armazenar as posições iniciais das ocorrências
-            int[] posicoes = new int[matches.Count];
-
-            // Preenche o array com as posições iniciais das ocorrências
-            for (int i = 0; i < matches.Count; i++)
-            {
-                posicoes[i] = matches[i].Index + 8;
-            }
-
-            return posicoes;
         }
 
         private string RemoverQuebrasDeLinha(string texto, string nomePaciente)
@@ -186,14 +175,29 @@ namespace PdfParaXml.Functions.IPOG
 
         private List<ObjResultado> getResultadosHPVAltoeBaixoRisco(string txtContend, string NomePaciente)
         {
+            var resultados = txtContend.Split(':').Where(s => !string.IsNullOrEmpty(s)).ToList();
+            var listaOrdenada = new List<ObjResultado>();
 
-            return null;
+            foreach (var resultado in resultados)
+            {
+
+            }
+
+            return listaOrdenada;
         }
 
         private List<ObjResultado> getResultadosHPVAltoRisco(string txtContend, string NomePaciente)
         {
+            var resultados = txtContend.Split(':').Where(s => !string.IsNullOrEmpty(s)).ToList();
+            var listaOrdenada = new List<ObjResultado>();
 
-            return null;
+            foreach (var resultado in resultados)
+            {
+
+            }
+
+
+            return listaOrdenada;
         }
 
         private List<ObjResultado> GetResultadosIST(string txtContend, string NomePaciente)
@@ -331,7 +335,7 @@ namespace PdfParaXml.Functions.IPOG
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "NOTA" });
                     break;
                 case "HPVAB":
-                    var resultadosHPVAltoeBaixoRisco = "";
+                    var resultadosHPVAltoeBaixoRisco = getResultadosHPVAltoeBaixoRisco(resultadoTxt, nomePaciente);
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CAPTURA" });
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "RLUPC1"  });
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "RLUPC2"  });
@@ -339,6 +343,7 @@ namespace PdfParaXml.Functions.IPOG
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "NOTA"    });
                     break;
                 case "HPVB":
+                    var resultadosHPVAltoRisco = getResultadosHPVAltoRisco(resultadoTxt, nomePaciente);
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CAPTURA"});
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "RLUPC1" });
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CONCL"  });
