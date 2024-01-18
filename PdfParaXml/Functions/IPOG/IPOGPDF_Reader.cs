@@ -86,7 +86,15 @@ namespace PdfParaXml.Functions.IPOG
                                 var resultadoComTratamento = RemoverQuebrasDeLinha(resultadoSemTratamento, nome);
                                 exame1.ItemDeExame = getResultadosComVariaveisDefinidas(nomeDoExame, resultadoComTratamento, nome);
                             }
-                                 
+
+                            if (nomeExame.Contains("CAPTURA HÍBRIDA PARA HPV ALTO E BAIXO RISCO"))
+                            {
+                                var dadosExames = getExamesDict();
+                                var nomeDoExame = dadosExames[nomeExame][2];
+                                var resultadoComTratamento = RemoverQuebrasDeLinha(resultadoSemTratamento, nome);
+                                exame1.ItemDeExame = getResultadosComVariaveisDefinidas(nomeDoExame, resultadoComTratamento, nome);
+                            }
+
                         }
                     }
                 }
@@ -164,9 +172,7 @@ namespace PdfParaXml.Functions.IPOG
         {
             string padrao = @":\s*RESULTADOS\s*:";
             texto = texto.Replace("\r\n", " ").Replace("\n", " ").Replace("\r", " ").Trim();
-            var posicaoNegativos = EncontrarPosicoes(texto, "NEGATIVO");
-            var posicaoPositivos = EncontrarPosicoes(texto, "POSITIVO");
-            var testando = GetResltadosIST(texto, nomePaciente);
+
             string teste = "";
             MatchCollection correspondencias = Regex.Matches(texto, padrao);
 
@@ -178,7 +184,19 @@ namespace PdfParaXml.Functions.IPOG
             return string.IsNullOrEmpty(teste) ? texto : texto.Replace(teste, "");
         }
 
-        private List<ObjResultado> GetResltadosIST(string txtContend, string NomePaciente)
+        private List<ObjResultado> getResultadosHPVAltoeBaixoRisco(string txtContend, string NomePaciente)
+        {
+
+            return null;
+        }
+
+        private List<ObjResultado> getResultadosHPVAltoRisco(string txtContend, string NomePaciente)
+        {
+
+            return null;
+        }
+
+        private List<ObjResultado> GetResultadosIST(string txtContend, string NomePaciente)
         {
             // Verifica se a posição fornecida é válida
 
@@ -197,6 +215,7 @@ namespace PdfParaXml.Functions.IPOG
                 if (proximaIteracao)
                     continue;
 
+                //Esse codigo trata resultados negativos
                 if (resultado.Contains("NEGATIVO"))
                 {
                     var result = new ObjResultado();
@@ -218,7 +237,8 @@ namespace PdfParaXml.Functions.IPOG
                     }
                     listaOrdenada.Add(result);
                 }
-                 
+                
+                // Caso a linha fique com dois resultados, esse codigo ajusta qual resultado é de qual parametro analisado
                 if ((resultado.Contains("POSITIVO") && resultado.Contains("NEGATIVO")) || (matchCollection.Count >= 2) || (matchCollectionPOSITIVO.Count >= 2))
                 {
                     var result = new ObjResultado();
@@ -239,6 +259,7 @@ namespace PdfParaXml.Functions.IPOG
                     listaOrdenada.Add(result);
                 }
 
+                //Esse codigo trata resultados positivos
                 if (resultado.Contains("POSITIVO"))
                 {
                     var result = new ObjResultado();
@@ -264,13 +285,6 @@ namespace PdfParaXml.Functions.IPOG
             return listaOrdenada;
         }
 
-        private class ObjResultado
-        {
-            public string variavel { get; set; }
-            public string resultado { get; set; }
-            public string nome { get; set; }
-        }
-
         private List<TemplateIPOG.ItemDeExame> getResultadosComVariaveisDefinidas(string exame,string resultadoTxt, string nomePaciente)
         {
             var itens = new List<TemplateIPOG.ItemDeExame>();
@@ -278,7 +292,7 @@ namespace PdfParaXml.Functions.IPOG
             switch (exame)
             {
                 case "DST I":
-                    var resultadosIST = GetResltadosIST(resultadoTxt, nomePaciente);
+                    var resultadosIST = GetResultadosIST(resultadoTxt, nomePaciente);
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CLTA" });
                     var cltaResult = resultadosIST.First(r => r.nome == "CHLAMYDIA TRACHOMATIS");
                     itens[0].Resultado = new TemplateIPOG.Resultado() { Conteudo = new TemplateIPOG.Conteudo() { Valor = getFormatacaoValor() } };
@@ -317,6 +331,7 @@ namespace PdfParaXml.Functions.IPOG
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "NOTA" });
                     break;
                 case "HPVAB":
+                    var resultadosHPVAltoeBaixoRisco = "";
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CAPTURA" });
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "RLUPC1"  });
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "RLUPC2"  });
@@ -365,21 +380,6 @@ namespace PdfParaXml.Functions.IPOG
             return text;
         }
 
-        private string[] getDSTResults(string PDFcontend)
-        {
-            return null;
-        }
-
-        private string[] getHPVABResults(string PDFcontend)
-        {
-            return null;
-        }
-
-        private string[] getHPVB(string PDFcontend)
-        {
-            return null;
-        }
-
         private Dictionary<string, List<string>> getExamesDict()
         {
             var examsDict = new Dictionary<string, List<string>>();
@@ -388,12 +388,6 @@ namespace PdfParaXml.Functions.IPOG
             examsDict.Add("CAPTURA HÍBRIDA PARA HPV ALTO RISCO", new List<string>() { "HPVCAPA", "HPV CAPTURA HÍBRIDA (ALTO RISCO)", "HPVB", "CAPTURA", "RLUPC1", "CONCL", "NOTA"});
             examsDict.Add("A definir", new List<string>() { "CLAGONCH", "CTNG - CAPTURA HÍBRIDA", "CLAGONCH" });
             return examsDict;
-        }
-
-        public class ModeloDePDFEExemplo
-        {
-            public string ExameNome;
-            public string fileName;
         }
 
         private string getMaterial(string pdfContend)
@@ -473,6 +467,19 @@ namespace PdfParaXml.Functions.IPOG
             valor.Tipo = "alfanumerico";
             valor.IdValor = 1;
             return valor;
+        }
+
+        private class ObjResultado
+        {
+            public string variavel { get; set; }
+            public string resultado { get; set; }
+            public string nome { get; set; }
+        }
+
+        public class ModeloDePDFEExemplo
+        {
+            public string ExameNome;
+            public string fileName;
         }
 
     }
