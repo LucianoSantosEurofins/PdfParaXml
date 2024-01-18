@@ -35,6 +35,7 @@ namespace PdfParaXml.Functions.IPOG
                 TemplateIPOG.Valor valor = new TemplateIPOG.Valor();
                 TemplateIPOG.Conteudo conteudo = new TemplateIPOG.Conteudo();
 
+                TemplateIPOG.Exame exame1 = new TemplateIPOG.Exame();
                 string nome = "";
                 string sexo = "";
                 string nomeExame = "";
@@ -50,6 +51,7 @@ namespace PdfParaXml.Functions.IPOG
                 string idade = "";
                 string codExterno = "";
                 string resultadoSemTratamento = "";
+                List<ObjResultado> objResultados = new List<ObjResultado>();
 
                 using (PdfReader reader = new PdfReader(arquivo))
                 {
@@ -76,9 +78,15 @@ namespace PdfParaXml.Functions.IPOG
                         {
                             metodo = getMetodo(line);
                             resultadoSemTratamento = getResultadoSemTratamento(textConted, reader, metodo).Trim();
-                            string teste;
+
                             if (nomeExame.Contains("PAINEL DE IST I (CT/NG/MHOM/MGEN/UUREA/UPAR/TVAG)"))
-                                 teste = RemoverQuebrasDeLinha(resultadoSemTratamento, nome);
+                            {
+                                var dadosExames = getExamesDict();
+                                var nomeDoExame = dadosExames[nomeExame][2];
+                                var resultadoComTratamento = RemoverQuebrasDeLinha(resultadoSemTratamento, nome);
+                                exame1.ItemDeExame = getResultadosComVariaveisDefinidas(nomeDoExame, resultadoComTratamento, nome);
+                            }
+                                 
                         }
                     }
                 }
@@ -115,7 +123,7 @@ namespace PdfParaXml.Functions.IPOG
                 conteudo.Valor = valor;
                 resultado.Conteudo = conteudo;
                 itemDeExame.Resultado = resultado;
-                exame.ItemDeExame = getResultadosComVariaveisDefinidas(dadosExame[nomeExame][2], resultadoSemTratamento);
+                exame.ItemDeExame = exame1.ItemDeExame;
                 superExame.Exame = exame;
                 pedido.SuperExame = superExame;
                 resultados.Pedidos.Add(pedido);
@@ -158,7 +166,7 @@ namespace PdfParaXml.Functions.IPOG
             texto = texto.Replace("\r\n", " ").Replace("\n", " ").Replace("\r", " ").Trim();
             var posicaoNegativos = EncontrarPosicoes(texto, "NEGATIVO");
             var posicaoPositivos = EncontrarPosicoes(texto, "POSITIVO");
-            var testando = CaptureWordsAfterPosition(texto, nomePaciente);
+            var testando = GetResltadosIST(texto, nomePaciente);
             string teste = "";
             MatchCollection correspondencias = Regex.Matches(texto, padrao);
 
@@ -170,7 +178,7 @@ namespace PdfParaXml.Functions.IPOG
             return string.IsNullOrEmpty(teste) ? texto : texto.Replace(teste, "");
         }
 
-        private string[] CaptureWordsAfterPosition(string txtContend, string NomePaciente)
+        private List<ObjResultado> GetResltadosIST(string txtContend, string NomePaciente)
         {
             // Verifica se a posição fornecida é válida
 
@@ -189,21 +197,27 @@ namespace PdfParaXml.Functions.IPOG
                 if (resultado.Contains("NEGATIVO"))
                 {
                     var result = new ObjResultado();
-                    result.nome = resultados[resultados.IndexOf(resultado) - 1].Replace("POSITIVO", "").Replace("NEGATIVO", ""); ;
+                    result.nome = resultados[resultados.IndexOf(resultado) - 1].Replace("POSITIVO", "").Replace("NEGATIVO", "").Trim(); ;
                     result.resultado = "NEGATIVO";
-                    if (matchCollection.Count >= 2)
+                    if (matchCollection.Count >= 2 || resultado.Contains("POSITIVO"))
                     {
                         var posicaoResultadoNegativo = resultado.IndexOf("NEGATIVO");
                         var posicaoResultadoPositivo = resultado.IndexOf("POSITIVO");
+                        var txtSemResultados = resultado.Replace("NEGATIVO", "").Replace("POSITIVO", "").Trim();
+                        var result2 = new ObjResultado();
+                        result2.nome = txtSemResultados;
 
                         if (posicaoResultadoNegativo > posicaoResultadoPositivo)
                         {
-                            result.resultado = "NEGATIVO";
+                            result2.resultado = "NEGATIVO";
+                            result.resultado = "POSITIVO";
                         }
                         else if (posicaoResultadoNegativo < posicaoResultadoPositivo)
                         {
-                            result.resultado = "POSITIVO";
+                            result2.resultado = "POSITIVO";
+                            result.resultado = "NEGATIVO";
                         }
+                        listaOrdenada.Add(result2);
                     }
                     listaOrdenada.Add(result);
                 }
@@ -213,25 +227,30 @@ namespace PdfParaXml.Functions.IPOG
                     var result = new ObjResultado();
                     result.nome = resultados[resultados.IndexOf(resultado) - 1].Replace("POSITIVO", "").Replace("NEGATIVO", "");
                     result.resultado = "POSITIVO";
-                    if (matchCollection.Count >= 2)
+                    if (matchCollection.Count >= 2 || resultado.Contains("NEGATIVO"))
                     {
                         var posicaoResultadoNegativo = resultado.IndexOf("NEGATIVO");
                         var posicaoResultadoPositivo = resultado.IndexOf("POSITIVO");
+                        var txtSemResultados = resultado.Replace("NEGATIVO", "").Replace("POSITIVO", "").Trim();
+                        var result2 = new ObjResultado();
+                        result2.nome = txtSemResultados;
 
                         if (posicaoResultadoNegativo > posicaoResultadoPositivo)
                         {
-                            result.resultado = "NEGATIVO";
+                            result2.resultado = "NEGATIVO";
+                            result.resultado = "POSITIVO";
                         }
                         else if (posicaoResultadoNegativo < posicaoResultadoPositivo)
                         {
-                            result.resultado = "POSITIVO";
+                            result2.resultado = "POSITIVO";
+                            result.resultado = "NEGATIVO";
                         }
+                        listaOrdenada.Add(result2);
                     }
                     listaOrdenada.Add(result);
                 }
             }
-
-            return null;
+            return listaOrdenada;
         }
 
         private class ObjResultado
@@ -241,33 +260,63 @@ namespace PdfParaXml.Functions.IPOG
             public string nome { get; set; }
         }
 
-        private List<TemplateIPOG.ItemDeExame> getResultadosComVariaveisDefinidas(string exame,string resultadoTxt, params string[] resultados)
+        private List<TemplateIPOG.ItemDeExame> getResultadosComVariaveisDefinidas(string exame,string resultadoTxt, string nomePaciente)
         {
             var itens = new List<TemplateIPOG.ItemDeExame>();
+
             switch (exame)
             {
                 case "DST I":
+                    var resultadosIST = GetResltadosIST(resultadoTxt, nomePaciente);
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CLTA" });
+                    var cltaResult = resultadosIST.First(r => r.nome == "CHLAMYDIA TRACHOMATIS");
+                    itens[0].Resultado = new TemplateIPOG.Resultado() { Conteudo = new TemplateIPOG.Conteudo() { Valor = getFormatacaoValor() } };
+                    itens[0].Resultado.Conteudo.Valor.Text = cltaResult.resultado;
+
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "NEGO" });
+                    var negoResult = resultadosIST.First(r => r.nome == "NEISSERIA GONORRHOEAE");
+                    itens[1].Resultado = new TemplateIPOG.Resultado() { Conteudo = new TemplateIPOG.Conteudo() { Valor = getFormatacaoValor() } };
+                    itens[1].Resultado.Conteudo.Valor.Text = negoResult.resultado;
+
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "MYGE" });
+                    var mygeResult = resultadosIST.First(r => r.nome == "MYCOPLASMA GENITALIUM");
+                    itens[2].Resultado = new TemplateIPOG.Resultado() { Conteudo = new TemplateIPOG.Conteudo() { Valor = getFormatacaoValor() } };
+                    itens[2].Resultado.Conteudo.Valor.Text = mygeResult.resultado;
+
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "MYHO" });
+                    var myhoResult = resultadosIST.First(r => r.nome == "MYCOPLASMA HOMINIS");
+                    itens[3].Resultado = new TemplateIPOG.Resultado() { Conteudo = new TemplateIPOG.Conteudo() { Valor = getFormatacaoValor() } };
+                    itens[3].Resultado.Conteudo.Valor.Text = myhoResult.resultado;
+
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "TRVA" });
+                    var trvaResult = resultadosIST.First(r => r.nome == "TRICHOMONAS VAGINALIS");
+                    itens[4].Resultado = new TemplateIPOG.Resultado() { Conteudo = new TemplateIPOG.Conteudo() { Valor = getFormatacaoValor() } };
+                    itens[4].Resultado.Conteudo.Valor.Text = trvaResult.resultado;
+
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "URUR" });
+                    var ururResult = resultadosIST.First(r => r.nome == "UREAPLASMA UREALYTICUM");
+                    itens[5].Resultado = new TemplateIPOG.Resultado() { Conteudo = new TemplateIPOG.Conteudo() { Valor = getFormatacaoValor() } };
+                    itens[5].Resultado.Conteudo.Valor.Text = ururResult.resultado;
+
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "URP"  });
+                    var urpResult = resultadosIST.First(r => r.nome == "UREAPLASMA PARVUM");
+                    itens[6].Resultado = new TemplateIPOG.Resultado() { Conteudo = new TemplateIPOG.Conteudo() { Valor = getFormatacaoValor() } };
+                    itens[6].Resultado.Conteudo.Valor.Text = urpResult.resultado;
+
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "NOTA" });
                     break;
                 case "HPVAB":
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CAPTURA" });
-                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "RLUPC1" });
-                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "RLUPC2" });
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "RLUPC1"  });
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "RLUPC2"  });
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CONCLUS" });
-                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "NOTA" });
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "NOTA"    });
                     break;
                 case "HPVB":
-                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CAPTURA" });
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CAPTURA"});
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "RLUPC1" });
-                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CONCL" });
-                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "NOTA" });
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CONCL"  });
+                    itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "NOTA"   });
                     break;
             }
             return itens;
