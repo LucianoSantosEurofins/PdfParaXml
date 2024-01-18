@@ -184,11 +184,14 @@ namespace PdfParaXml.Functions.IPOG
 
             var resultados = txtContend.Split(':').Where(s => !string.IsNullOrEmpty(s)).ToList();
             var listaOrdenada = new List<ObjResultado>();
+            var resultadoConsiderado = new List<string>() {"NEGATIVO", "POSITIVO"};
             foreach (var resultado in resultados)
             {
                 string value = "NEGATIVO";
+                string value2 = "POSITIVO";
                 string Ignore = "RESULT*";
                 MatchCollection matchCollection = Regex.Matches(resultado, value);
+                MatchCollection matchCollectionPOSITIVO = Regex.Matches(resultado, value2);
                 var proximaIteracao = Regex.Match(resultado, Ignore).Success;
 
                 if (proximaIteracao)
@@ -197,55 +200,63 @@ namespace PdfParaXml.Functions.IPOG
                 if (resultado.Contains("NEGATIVO"))
                 {
                     var result = new ObjResultado();
-                    result.nome = resultados[resultados.IndexOf(resultado) - 1].Replace("POSITIVO", "").Replace("NEGATIVO", "").Trim(); ;
+                    result.nome = resultados[resultados.IndexOf(resultado) - 1].Replace("POSITIVO", "").Replace("NEGATIVO", "").Trim();
                     result.resultado = "NEGATIVO";
                     if (matchCollection.Count >= 2 || resultado.Contains("POSITIVO"))
                     {
                         var posicaoResultadoNegativo = resultado.IndexOf("NEGATIVO");
                         var posicaoResultadoPositivo = resultado.IndexOf("POSITIVO");
-                        var txtSemResultados = resultado.Replace("NEGATIVO", "").Replace("POSITIVO", "").Trim();
-                        var result2 = new ObjResultado();
-                        result2.nome = txtSemResultados;
 
-                        if (posicaoResultadoNegativo > posicaoResultadoPositivo)
+                        if (posicaoResultadoNegativo < posicaoResultadoPositivo || !resultado.Contains("POSITIVO"))
                         {
-                            result2.resultado = "NEGATIVO";
-                            result.resultado = "POSITIVO";
-                        }
-                        else if (posicaoResultadoNegativo < posicaoResultadoPositivo)
-                        {
-                            result2.resultado = "POSITIVO";
                             result.resultado = "NEGATIVO";
                         }
-                        listaOrdenada.Add(result2);
+                        else if (posicaoResultadoNegativo > posicaoResultadoPositivo)
+                        {
+                            result.resultado = "POSITIVO";
+                        }
                     }
+                    listaOrdenada.Add(result);
+                }
+                 
+                if ((resultado.Contains("POSITIVO") && resultado.Contains("NEGATIVO")) || (matchCollection.Count >= 2) || (matchCollectionPOSITIVO.Count >= 2))
+                {
+                    var result = new ObjResultado();
+                    result.nome = resultado.Replace("POSITIVO", "").Replace("NEGATIVO", "").Trim().Trim();
+
+                    var posicaoResultadoNegativo = resultado.IndexOf("NEGATIVO");
+                    var posicaoResultadoPositivo = resultado.IndexOf("POSITIVO");
+
+                    if (posicaoResultadoNegativo > posicaoResultadoPositivo)
+                    {
+                        result.resultado = "NEGATIVO";
+                    }
+                    else if (posicaoResultadoNegativo < posicaoResultadoPositivo)
+                    {
+                        result.resultado = "POSITIVO";
+                    }
+
                     listaOrdenada.Add(result);
                 }
 
                 if (resultado.Contains("POSITIVO"))
                 {
                     var result = new ObjResultado();
-                    result.nome = resultados[resultados.IndexOf(resultado) - 1].Replace("POSITIVO", "").Replace("NEGATIVO", "");
+                    result.nome = resultados[resultados.IndexOf(resultado) - 1].Replace("POSITIVO", "").Replace("NEGATIVO", "").Trim();
                     result.resultado = "POSITIVO";
                     if (matchCollection.Count >= 2 || resultado.Contains("NEGATIVO"))
                     {
                         var posicaoResultadoNegativo = resultado.IndexOf("NEGATIVO");
                         var posicaoResultadoPositivo = resultado.IndexOf("POSITIVO");
-                        var txtSemResultados = resultado.Replace("NEGATIVO", "").Replace("POSITIVO", "").Trim();
-                        var result2 = new ObjResultado();
-                        result2.nome = txtSemResultados;
 
-                        if (posicaoResultadoNegativo > posicaoResultadoPositivo)
+                        if (posicaoResultadoNegativo < posicaoResultadoPositivo)
                         {
-                            result2.resultado = "NEGATIVO";
-                            result.resultado = "POSITIVO";
-                        }
-                        else if (posicaoResultadoNegativo < posicaoResultadoPositivo)
-                        {
-                            result2.resultado = "POSITIVO";
                             result.resultado = "NEGATIVO";
                         }
-                        listaOrdenada.Add(result2);
+                        else if (posicaoResultadoNegativo > posicaoResultadoPositivo)
+                        {
+                            result.resultado = "POSITIVO";
+                        }
                     }
                     listaOrdenada.Add(result);
                 }
