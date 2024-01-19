@@ -280,15 +280,19 @@ namespace PdfParaXml.Functions.IPOG
             var resultados = txtContend.Split(':').Where(s => !string.IsNullOrEmpty(s)).ToList();
             var listaOrdenada = new List<ObjResultado>();
             var objResultado = new ObjResultado();
-           // foreach (var resultado in resultados)
-           // {
-           //     if (resultado.Contains("ALTO RISCO"))
-           //     {
-           //         objResultado.nome = "ALTO RISCO:";
-           //         objResultado.resultado = resultado[resultados.IndexOf(resultado) + 1].ToString().Contains("POSITIVO") ? "POSITIVO" : "NEGATIVO";
-           //     }
-           //         
-           // }
+            foreach (var resultado in resultados)
+            {
+                if (resultado.Contains("ALTO RISCO"))
+                {
+                    objResultado.nome = "ALTO RISCO";
+                    objResultado.resultado = resultado[resultados.IndexOf(resultado) + 1].ToString().Contains("POSITIVO") ? "POSITIVO" : "NEGATIVO";
+                    string padrao = @"(\d+(?:\.\d{1,2})?)";
+                    Regex regex = new Regex(padrao);
+                    MatchCollection correspondencias = regex.Matches(txtContend);
+                    objResultado.RLUPCAlto = $"{correspondencias[0]},{correspondencias[1]}";
+                    listaOrdenada.Add(objResultado);
+                }
+            }
 
             return listaOrdenada;
         }
