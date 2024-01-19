@@ -223,9 +223,56 @@ namespace PdfParaXml.Functions.IPOG
                     objResultadoBaixo.RLUPCBaixo = $"{correspondencias[0]},{correspondencias[1]}";
                     listaOrdenada.Add(objResultadoBaixo);
                 }
-            }
 
+                if (resultado.Contains("RESULTADO"))
+                {
+                    string resultadoInter = getResultadoInterPretacao(txtContend, txtContend).Replace(":", ""); //txtContend[txtContend.IndexOf("RESULTADO") : 2];
+                    string ConclusaoInter = getResultadoConclusao(txtContend, txtContend).Replace(":", ""); //txtContend[txtContend.IndexOf("RESULTADO") : 2];
+                    listaOrdenada.Add(new ObjResultado() { nome = "CAPTURA", resultado = resultadoInter, variavel = ConclusaoInter });
+                }
+            }
             return listaOrdenada;
+        }
+
+
+        private string getResultadoInterPretacao(string pdfContend, string reader)
+        {
+            string startWord = "RESULTADO";
+            string endWord = "CONCLUSÃO";
+            pdfContend = reader;
+            int startIndex = pdfContend.IndexOf(startWord);
+            int endIndex = pdfContend.IndexOf(endWord);
+
+            if (startIndex != -1 && endIndex != -1)
+            {
+                int startIndexToUse = startIndex + startWord.Length;
+                string result = pdfContend.Substring(startIndexToUse, endIndex - startIndexToUse).Trim();
+                return result.Replace("Interpretação:", "");
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        private string getResultadoConclusao(string pdfContend, string reader)
+        {
+            string startWord = "CONCLUSÃO";
+            string endWord = ".";
+            pdfContend = reader;
+            int startIndex = pdfContend.IndexOf(startWord);
+            int endIndex = pdfContend.IndexOf(endWord);
+
+            if (startIndex != -1 && endIndex != -1)
+            {
+                int startIndexToUse = startIndex + startWord.Length;
+                string result = pdfContend.Substring(startIndexToUse, endIndex - startIndexToUse).Trim();
+                return result.Replace("Interpretação:", "");
+            }
+            else
+            {
+                return "";
+            }
         }
 
         private List<ObjResultado> getResultadosHPVAltoRisco(string txtContend, string NomePaciente)
@@ -383,6 +430,9 @@ namespace PdfParaXml.Functions.IPOG
                 case "HPVAB":
                     var resultadosHPVAltoeBaixoRisco = getResultadosHPVAltoeBaixoRisco(resultadoTxt, nomePaciente);
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CAPTURA" });
+                    var CAPTURA = resultadosHPVAltoeBaixoRisco.First(r => r.nome == "CAPTURA");
+                    itens[0].Resultado = new TemplateIPOG.Resultado() { Conteudo = new TemplateIPOG.Conteudo() { Valor = getFormatacaoValor() } };
+                    itens[0].Resultado.Conteudo.Valor.Text = CAPTURA.resultado;
 
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "RLUPC1"  });
                     var RLUPC1 = resultadosHPVAltoeBaixoRisco.First(r => r.nome == "BAIXO RISCO");
@@ -395,6 +445,10 @@ namespace PdfParaXml.Functions.IPOG
                     itens[2].Resultado.Conteudo.Valor.Text = RLUPC2.RLUPCAlto;
 
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CONCLUS" });
+                    var CONCLUS = resultadosHPVAltoeBaixoRisco.First(r => r.nome == "CAPTURA");
+                    itens[3].Resultado = new TemplateIPOG.Resultado() { Conteudo = new TemplateIPOG.Conteudo() { Valor = getFormatacaoValor() } };
+                    itens[3].Resultado.Conteudo.Valor.Text = CONCLUS.variavel;
+
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "NOTA"    });
                     break;
                 case "HPVB":
