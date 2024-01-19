@@ -177,10 +177,52 @@ namespace PdfParaXml.Functions.IPOG
         {
             var resultados = txtContend.Split(':').Where(s => !string.IsNullOrEmpty(s)).ToList();
             var listaOrdenada = new List<ObjResultado>();
+            var objResultadoBaixo = new ObjResultado();
 
+            var controleResultadoAltoRisco = false;
+            var controleResultadoBaixoRisco = false;
+            var controleResultadoRLUBaixoRisco = false;
             foreach (var resultado in resultados)
             {
+                if (resultado.Contains("ALTO RISCO") && controleResultadoAltoRisco == false)
+                {
+                    var objResultado = new ObjResultado();
+                    objResultado.nome = "ALTO RISCO";
+                    objResultado.resultado = resultados[resultados.IndexOf(resultado) + 1].Contains("POSITIVO") ? "POSITIVO" : "NEGATIVO";
+                    string padrao = @"(\d+(?:\.\d{1,2})?)";
 
+                    // Criando um objeto Regex
+                    Regex regex = new Regex(padrao);
+
+                    // Encontrando correspondências na string
+                    MatchCollection correspondencias = regex.Matches(resultados[resultados.IndexOf(resultado) + 1]);
+
+                    objResultado.RLUPCAlto = $"{correspondencias[0].ToString()},{correspondencias[1].ToString()}";
+                    listaOrdenada.Add(objResultado);
+                    controleResultadoAltoRisco = true;
+                }
+
+                
+                if (resultado.Contains("BAIXO RISCO") && controleResultadoBaixoRisco == false)
+                {
+                    objResultadoBaixo.nome = "BAIXO RISCO";
+                    objResultadoBaixo.resultado = resultado.Contains("POSITIVO") ? "POSITIVO" : "NEGATIVO";
+                    controleResultadoBaixoRisco = true;
+                }
+
+                if (resultado.Contains("RLU/PC") && controleResultadoRLUBaixoRisco == false && controleResultadoBaixoRisco == true)
+                {
+                    var resultBruto = resultados[resultados.IndexOf(resultado) + 1];
+                    string padrao = @"(\d+(?:\.\d{1,2})?)";
+
+                    // Criando um objeto Regex
+                    Regex regex = new Regex(padrao);
+
+                    // Encontrando correspondências na string
+                    MatchCollection correspondencias = regex.Matches(resultBruto);
+                    objResultadoBaixo.RLUPCBaixo = $"{correspondencias[0]},{correspondencias[1]}";
+                    listaOrdenada.Add(objResultadoBaixo);
+                }
             }
 
             return listaOrdenada;
@@ -190,12 +232,16 @@ namespace PdfParaXml.Functions.IPOG
         {
             var resultados = txtContend.Split(':').Where(s => !string.IsNullOrEmpty(s)).ToList();
             var listaOrdenada = new List<ObjResultado>();
-
-            foreach (var resultado in resultados)
-            {
-
-            }
-
+            var objResultado = new ObjResultado();
+           // foreach (var resultado in resultados)
+           // {
+           //     if (resultado.Contains("ALTO RISCO"))
+           //     {
+           //         objResultado.nome = "ALTO RISCO:";
+           //         objResultado.resultado = resultado[resultados.IndexOf(resultado) + 1].ToString().Contains("POSITIVO") ? "POSITIVO" : "NEGATIVO";
+           //     }
+           //         
+           // }
 
             return listaOrdenada;
         }
@@ -337,8 +383,17 @@ namespace PdfParaXml.Functions.IPOG
                 case "HPVAB":
                     var resultadosHPVAltoeBaixoRisco = getResultadosHPVAltoeBaixoRisco(resultadoTxt, nomePaciente);
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CAPTURA" });
+
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "RLUPC1"  });
+                    var RLUPC1 = resultadosHPVAltoeBaixoRisco.First(r => r.nome == "BAIXO RISCO");
+                    itens[1].Resultado = new TemplateIPOG.Resultado() { Conteudo = new TemplateIPOG.Conteudo() { Valor = getFormatacaoValor() } };
+                    itens[1].Resultado.Conteudo.Valor.Text = RLUPC1.RLUPCBaixo;
+
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "RLUPC2"  });
+                    var RLUPC2 = resultadosHPVAltoeBaixoRisco.First(r => r.nome == "ALTO RISCO");
+                    itens[2].Resultado = new TemplateIPOG.Resultado() { Conteudo = new TemplateIPOG.Conteudo() { Valor = getFormatacaoValor() } };
+                    itens[2].Resultado.Conteudo.Valor.Text = RLUPC2.RLUPCAlto;
+
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CONCLUS" });
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "NOTA"    });
                     break;
@@ -476,9 +531,11 @@ namespace PdfParaXml.Functions.IPOG
 
         private class ObjResultado
         {
-            public string variavel { get; set; }
-            public string resultado { get; set; }
-            public string nome { get; set; }
+            public string variavel   { get; set; }
+            public string resultado  { get; set; }
+            public string nome       { get; set; }
+            public string RLUPCAlto  { get; set; }
+            public string RLUPCBaixo { get; set; }
         }
 
         public class ModeloDePDFEExemplo
