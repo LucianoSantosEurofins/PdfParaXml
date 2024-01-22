@@ -111,7 +111,7 @@ namespace PdfParaXml.Functions.Mendelics
 
                 pedido.fileName = arquivo;
                 pedido.CodPedApoio = exameYT; //Provavelmente precisara ser ajustado futuramente
-                pedido.CodPedLab = consultarBancoDeDados.GetNumAtendimento(nome).nome;
+                pedido.CodPedLab = consultarBancoDeDados.GetNumAtendimento(nome, nomeExame).nome;
                 pedido.Nome = nome;
 
                 superExame.MaterialNome = material;

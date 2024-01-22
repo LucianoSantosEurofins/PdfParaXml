@@ -10,7 +10,7 @@ namespace PdfParaXml.Functions
 {
     public class ConsultarBancoDeDados
     {
-        public ResultadoConsultaExame GetNumAtendimento(string nomePaciente, string connectionString = "Server=192.168.2.13;Database=Pleres-CentroDeGenomas;User Id=luciano.oliveira;Password=Eurofins$#@!2023;")
+        public ResultadoConsultaExame GetNumAtendimento(string nomePaciente,string examePleres , string connectionString = "Server=192.168.2.13;Database=Pleres-CentroDeGenomas;User Id=luciano.oliveira;Password=Eurofins$#@!2023;")
         {
             ResultadoConsultaExame resultadoConsultaExame = new ResultadoConsultaExame();
 
@@ -35,7 +35,7 @@ namespace PdfParaXml.Functions
                                    "     inner join atendimento on(ea.id_atendimento = atendimento.id) " +
                                    "     inner join prontuario on(atendimento.id_prontuario = prontuario.id) " +
                                    "     inner join pessoa_fisica on(prontuario.id_pessoa = pessoa_fisica.id) " +
-                                   " WHERE exame.str_nome like '%' " +
+                                   $" WHERE exame.str_nome like '%{examePleres}%' " +
                                    $"     AND pessoa_fisica.str_nome like '%{nomePaciente}%'";
 
                     // Cria um objeto SqlCommand com a consulta e a conexão associada
