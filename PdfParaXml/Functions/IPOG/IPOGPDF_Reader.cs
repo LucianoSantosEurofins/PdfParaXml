@@ -71,6 +71,21 @@ namespace PdfParaXml.Functions.IPOG
                             nomeExame = pdfLines[16];
                         }
 
+                        if (textConted.Contains("CAPTURA HÍBRIDA PARA HPV ALTO E BAIXO RISCO"))
+                        {
+                            nomeExame = "CAPTURA HÍBRIDA PARA HPV ALTO E BAIXO RISCO";
+                        }
+
+                        if (textConted.Contains("CAPTURA HÍBRIDA PARA HPV ALTO RISCO"))
+                        {
+                            nomeExame = "CAPTURA HÍBRIDA PARA HPV ALTO RISCO";
+                        }
+
+                        if (textConted.Contains("PAINEL DE IST I (CT/NG/MHOM/MGEN/UUREA/UPAR/TVAG)"))
+                        {
+                            nomeExame = "PAINEL DE IST I (CT/NG/MHOM/MGEN/UUREA/UPAR/TVAG)";
+                        }
+
                         if (line.Contains("MATERIAL"))
                             material = getMaterial(line).Trim();
 
@@ -196,6 +211,11 @@ namespace PdfParaXml.Functions.IPOG
 
                     // Encontrando correspondências na string
                     MatchCollection correspondencias = regex.Matches(resultados[resultados.IndexOf(resultado) + 1]);
+
+                    if (correspondencias.Count == 0)
+                    {
+                        correspondencias = regex.Matches(resultados[resultados.IndexOf(resultado) + 2]);
+                    }
 
                     objResultado.RLUPCAlto = $"{correspondencias[0].ToString()},{correspondencias[1].ToString()}";
                     listaOrdenada.Add(objResultado);
@@ -470,7 +490,7 @@ namespace PdfParaXml.Functions.IPOG
         {
             string startWord = "MÉTODO";
             string endWord = "VALOR DE REFERÊNCIA";
-            pdfContend = getPdfTextLastPage(reader);
+            //pdfContend = getPdfTextLastPage(reader);
             int startIndex = pdfContend.IndexOf(startWord);
             int endIndex = pdfContend.IndexOf(endWord) == -1 ? pdfContend.IndexOf("VALORES DE REFERÊNCIA") : pdfContend.IndexOf(endWord);
 
