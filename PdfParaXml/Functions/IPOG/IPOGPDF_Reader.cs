@@ -134,7 +134,7 @@ namespace PdfParaXml.Functions.IPOG
 
                 pedido.fileName = arquivo;
                 pedido.CodPedApoio = exameYT; //Provavelmente precisara ser ajustado futuramente
-                pedido.CodPedLab = codExterno;
+                pedido.CodPedLab = $"002{codExterno}";
                 pedido.Nome = nome;
 
                 superExame.MaterialNome = material;
