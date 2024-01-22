@@ -514,7 +514,6 @@ namespace PdfParaXml.Functions.IPOG
             {
                 text = PdfTextExtractor.GetTextFromPage(pdfReader, i);
             }
-
             return text;
         }
 
@@ -565,7 +564,6 @@ namespace PdfParaXml.Functions.IPOG
             {
                 string caminhoOrigem = System.IO.Path.Combine(origem, arquivo);
                 string caminhoDestino = System.IO.Path.Combine(destino, System.IO.Path.GetFileName(arquivo));
-
                 // Use o método Move da classe File para mover o arquivo
                 File.Move(caminhoOrigem, caminhoDestino);
             }
@@ -577,7 +575,6 @@ namespace PdfParaXml.Functions.IPOG
 
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
-
             return path;
         }
 
@@ -589,7 +586,6 @@ namespace PdfParaXml.Functions.IPOG
             {
                 text = text + "\n" + PdfTextExtractor.GetTextFromPage(pdfReader, i);
             }
-
             return text;
         }
 
@@ -621,6 +617,5 @@ namespace PdfParaXml.Functions.IPOG
             public string ExameNome;
             public string fileName;
         }
-
     }
 }
