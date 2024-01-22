@@ -43,7 +43,7 @@ namespace PdfParaXml.Functions.PDFImgCapture
                         //    saveImage.Save(ms, ImageFormat.Png);
                         //    byte[] bytes = ms.ToArray();
                         //    fs.Write(bytes, 0, bytes.Length);
-                        //}
+                        //}t
                     }
                 }
             }
