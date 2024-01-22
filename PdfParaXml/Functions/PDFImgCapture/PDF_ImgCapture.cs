@@ -37,13 +37,13 @@ namespace PdfParaXml.Functions.PDFImgCapture
                     // Save the region image to a file (or do whatever you need with it)
                     using (MemoryStream ms = new MemoryStream())
                     {
-                        using (FileStream fs = new FileStream(System.IO.Path.Combine(destinationImagePath, $"{numeroAtendimento}_{paciente}captured_Img.png"),FileMode.Create, FileAccess.ReadWrite))
-                        {
-                            var saveImage =  new Bitmap(resultImage);
-                            saveImage.Save(ms, ImageFormat.Png);
-                            byte[] bytes = ms.ToArray();
-                            fs.Write(bytes, 0, bytes.Length);
-                        }
+                        //using (FileStream fs = new FileStream(System.IO.Path.Combine(destinationImagePath, $"{numeroAtendimento}_{paciente}captured_Img.png"),FileMode.Create, FileAccess.ReadWrite))
+                        //{
+                        //    var saveImage =  new Bitmap(resultImage);
+                        //    saveImage.Save(ms, ImageFormat.Png);
+                        //    byte[] bytes = ms.ToArray();
+                        //    fs.Write(bytes, 0, bytes.Length);
+                        //}
                     }
                 }
             }
