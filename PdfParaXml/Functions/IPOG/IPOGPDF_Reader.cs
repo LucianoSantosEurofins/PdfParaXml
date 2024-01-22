@@ -11,7 +11,7 @@ using PdfParaXml.TemplateXML;
 using System.Xml.Serialization;
 using PdfParaXml.Functions.CriadorDePlanilha;
 using static PdfParaXml.TemplateXML.TemplateIPOG;
-//teste
+
 namespace PdfParaXml.Functions.IPOG
 {
     public class IPOGPDF_Reader
@@ -165,7 +165,7 @@ namespace PdfParaXml.Functions.IPOG
             //CriadorDePlanilha.CriadorDePlanilha criadorDePlanilha = new CriadorDePlanilha.CriadorDePlanilha();
             //criadorDePlanilha.CriarPlanilhaExcel(listaDeExames, "MendelicsExel");
             var destinoDosPDFs = CreatePdfsDir("PDFs Usados\\PDFs IPOG");
-            MoverArquivos(pastaRaiz, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, destinoDosPDFs), arquivos);
+            //MoverArquivos(pastaRaiz, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, destinoDosPDFs), arquivos);
             using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine(localizacaoXML, fileName)))
             {
                 xmlSerializer.Serialize(writer, resultados);
@@ -566,6 +566,7 @@ namespace PdfParaXml.Functions.IPOG
 
         static void MoverArquivos(string origem, string destino, string[] arquivos)
         {
+
             foreach (var arquivo in arquivos)
             {
                 string caminhoOrigem = System.IO.Path.Combine(origem, arquivo);
