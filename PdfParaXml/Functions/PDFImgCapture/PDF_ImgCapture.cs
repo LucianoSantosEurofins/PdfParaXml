@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Text.RegularExpressions;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
@@ -37,17 +38,26 @@ namespace PdfParaXml.Functions.PDFImgCapture
                     // Save the region image to a file (or do whatever you need with it)
                     using (MemoryStream ms = new MemoryStream())
                     {
-                        //using (FileStream fs = new FileStream(System.IO.Path.Combine(destinationImagePath, $"{numeroAtendimento}_{paciente}captured_Img.png"),FileMode.Create, FileAccess.ReadWrite))
-                        //{
-                        //    var saveImage =  new Bitmap(resultImage);
-                        //    saveImage.Save(ms, ImageFormat.Png);
-                        //    byte[] bytes = ms.ToArray();
-                        //    fs.Write(bytes, 0, bytes.Length);
-                        //}t
+                        using (FileStream fs = new FileStream(System.IO.Path.Combine(destinationImagePath, $"{RemoverCaracteresEspeciais(numeroAtendimento)}_{paciente}captured_Img.png"),FileMode.Create, FileAccess.ReadWrite))
+                        {
+                            var saveImage =  new Bitmap(resultImage);
+                            saveImage.Save(ms, ImageFormat.Png);
+                            byte[] bytes = ms.ToArray();
+                            fs.Write(bytes, 0, bytes.Length);
+                        }
                     }
                 }
             }
             return img;
+        }
+
+
+        static string RemoverCaracteresEspeciais(string input)
+        {
+            // Use uma expressão regular para substituir caracteres especiais por uma string vazia
+            string pattern = @"[^a-zA-Z0-9]"; // remove tudo que não é letra ou número
+            string resultado = Regex.Replace(input, pattern, "");
+            return resultado;
         }
 
         static Image CaptureRegion(Image fullImage, System.Drawing.Rectangle region)
