@@ -197,6 +197,7 @@ namespace PdfParaXml.Functions.IPOG
             var controleResultadoAltoRisco = false;
             var controleResultadoBaixoRisco = false;
             var controleResultadoRLUBaixoRisco = false;
+            var primeiraOcorrenciaRLU = 0;
             foreach (var resultado in resultados)
             {
                 if (resultado.Contains("ALTO RISCO") && controleResultadoAltoRisco == false)
@@ -205,7 +206,7 @@ namespace PdfParaXml.Functions.IPOG
                     objResultado.nome = "ALTO RISCO";
                     objResultado.resultado = resultados[resultados.IndexOf(resultado) + 1].Contains("POSITIVO") ? "POSITIVO" : "NEGATIVO";
                     string padrao = @"(\d+(?:\.\d{1,2})?)";
-
+                    
                     // Criando um objeto Regex
                     Regex regex = new Regex(padrao);
 
@@ -215,7 +216,10 @@ namespace PdfParaXml.Functions.IPOG
                     if (correspondencias.Count == 0)
                     {
                         correspondencias = regex.Matches(resultados[resultados.IndexOf(resultado) + 2]);
+                        primeiraOcorrenciaRLU = resultados.IndexOf(resultado) + 2;
                     }
+                    else
+                        primeiraOcorrenciaRLU = resultados.IndexOf(resultado) + 1;
 
                     objResultado.RLUPCAlto = $"{correspondencias[0].ToString()},{correspondencias[1].ToString()}";
                     listaOrdenada.Add(objResultado);
@@ -233,7 +237,10 @@ namespace PdfParaXml.Functions.IPOG
                 if (resultado.Contains("RLU/PC") && controleResultadoRLUBaixoRisco == false && controleResultadoBaixoRisco == true)
                 {
                     var resultBruto = resultados[resultados.IndexOf(resultado) + 1];
+                    var comparacaoDasPosicoes = resultados.IndexOf(resultBruto) == primeiraOcorrenciaRLU;
                     string padrao = @"(\d+(?:\.\d{1,2})?)";
+
+                    resultBruto = comparacaoDasPosicoes ? resultados[resultados.IndexOf(resultado) + 3] : resultados[resultados.IndexOf(resultado) + 1];
 
                     // Criando um objeto Regex
                     Regex regex = new Regex(padrao);
