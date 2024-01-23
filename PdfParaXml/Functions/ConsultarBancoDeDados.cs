@@ -13,7 +13,6 @@ namespace PdfParaXml.Functions
         public ResultadoConsultaExame GetNumAtendimento(string nomePaciente,string examePleres , string connectionString = "Server=192.168.2.13;Database=Pleres-CentroDeGenomas;User Id=luciano.oliveira;Password=Eurofins$#@!2023;")
         {
             ResultadoConsultaExame resultadoConsultaExame = new ResultadoConsultaExame();
-
             try
             {
                 // Cria uma nova conexão com o SQL Server
@@ -60,7 +59,6 @@ namespace PdfParaXml.Functions
             {
                 Console.WriteLine("Erro: " + ex.Message);
             }
-
             return resultadoConsultaExame;
         }
     }

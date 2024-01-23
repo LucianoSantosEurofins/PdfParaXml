@@ -21,6 +21,7 @@ namespace PdfParaXml.Functions.IPOG
             string outputFilePath = Directory.GetCurrentDirectory(); ;
             string[] arquivos = Directory.GetFiles(pastaRaiz, "*.pdf");
             TemplateIPOG.Resultados resultados = new TemplateIPOG.Resultados();
+           
             resultados.Pedidos = new List<TemplateIPOG.Pedido>();
             foreach (var arquivo in arquivos)
             {
@@ -131,14 +132,19 @@ namespace PdfParaXml.Functions.IPOG
                 controleDeLote.DataEmissao = DateTime.Now.ToString("dd/MM/yyyy");
                 controleDeLote.HoraEmissao = DateTime.Now.ToString("HH:mm:ss");
                 controleDeLote.CodLab = "Centro de genomas";
-
+                var dadosExame = getExamesDict();
                 pedido.fileName = arquivo;
-                pedido.CodPedApoio = exameYT; //Provavelmente precisara ser ajustado futuramente
+
+                Regex regex = new Regex(@"^\d+$");
+                if (string.IsNullOrEmpty(codExterno.Trim()) || !regex.IsMatch(codExterno.Trim()))
+                {
+                    codExterno = consultarBancoDeDados.GetNumAtendimento(nome, dadosExame[nomeExame][1]).numAtendimento;
+                }
                 pedido.CodPedLab = $"002{codExterno}";
                 pedido.Nome = nome;
 
                 superExame.MaterialNome = material;
-                var dadosExame = getExamesDict();
+                
                 superExame.ExameNome = dadosExame[nomeExame][1];
                 superExame.CodExmApoio = $"{dadosExame[nomeExame][1]}|{dadosExame[nomeExame][2]}|1";
                 superExame.CodigoFormato = 1;
