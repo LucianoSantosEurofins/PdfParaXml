@@ -117,11 +117,18 @@ namespace PdfParaXml.Functions.Sollutio
 
                     pedido.fileName = arquivo;
                     pedido.CodPedApoio = requisicao; //Provavelmente precisara ser ajustado futuramente
+
+                    Regex regex = new Regex(@"^\d+$");
+                    ConsultarBancoDeDados consultarBancoDeDados = new ConsultarBancoDeDados();
+                    var dadosExame = getExamesDict();
+                    if (string.IsNullOrEmpty(codExterno.Trim()) || !regex.IsMatch(codExterno.Trim()))
+                        codExterno = consultarBancoDeDados.GetNumAtendimento(nome, dadosExame[nomeExame][1]).numAtendimento;
+
                     pedido.CodPedLab = $"002{codExterno}"; //Colocar 002 no começo ;
                     pedido.Nome = nome;
 
                     superExame.MaterialNome = material;
-                    var dadosExame = getExamesDict();
+
                     superExame.ExameNome = dadosExame[nomeExame][1]; // ajustar para CARIOTIPO DE SANGUE PERIFÉRICO COM BANDEAMENTO G
                     superExame.CodExmApoio = $"{dadosExame[nomeExame][1]}|{dadosExame[nomeExame][2]}|1";// Concatenar nome do exame | abreviação | 1;
                     superExame.CodigoFormato = 1;
