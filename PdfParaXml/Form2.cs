@@ -28,7 +28,7 @@ namespace PdfParaXml
         string fileName1;
         public Form2(string locationXML, string fileName ,TemplateIPOG.Resultados resultadosIpog = null, TemplateSollutio.Resultados resultadosSollutio = null, TemplateXML.Resultados resultadosMendelics = null)
         {
-            var dtg = new BindingList<TemplateIPOG.Pedido>(resultadosIpog.Pedidos);
+            var dtg = new BindingList<TemplateIPOG.Pedido>(resultadosIpog.Pedidos.Where(p => p.CodPedLab == "002").ToList());
             InitializeComponent();
             TemplateIPOG     = resultadosIpog;
             TemplateSollutio = resultadosSollutio;
