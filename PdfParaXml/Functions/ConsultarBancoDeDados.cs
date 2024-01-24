@@ -22,7 +22,7 @@ namespace PdfParaXml.Functions
                     // Abre a conexão
                     connection.Open();
 
-                    // Exemplo de uma consulta SQL
+                    //consulta SQL
                     string query = "SELECT DISTINCT " +
                                    "    exame.id, " +
                                    " 	pessoa_fisica.str_nome, " +
