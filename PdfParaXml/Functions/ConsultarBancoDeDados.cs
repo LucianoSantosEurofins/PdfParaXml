@@ -5,12 +5,13 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace PdfParaXml.Functions
 {
     public class ConsultarBancoDeDados
     {
-        public ResultadoConsultaExame GetNumAtendimento(string nomePaciente,string examePleres , string connectionString = "Server=192.168.2.13;Database=Pleres-CentroDeGenomas;User Id=luciano.oliveira;Password=Eurofins$#@!2023;")
+        public ResultadoConsultaExame GetNumAtendimento(string nomePaciente,string examePleres , string connectionString = "Server=CATGSRV-LD02;Database=Pleres-CentroDeGenomas;User Id=luciano.oliveira;Password=Eurofins$#@!2023;TRUSTED_CONNECTION = TRUE;")
         {
             ResultadoConsultaExame resultadoConsultaExame = new ResultadoConsultaExame();
             try
@@ -58,6 +59,7 @@ namespace PdfParaXml.Functions
             catch (Exception ex)
             {
                 Console.WriteLine("Erro: " + ex.Message);
+                MessageBox.Show(ex.Message);
             }
             return resultadoConsultaExame;
         }

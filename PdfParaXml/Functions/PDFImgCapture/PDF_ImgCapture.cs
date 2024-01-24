@@ -50,8 +50,6 @@ namespace PdfParaXml.Functions.PDFImgCapture
             }
             return img;
         }
-
-
         static string RemoverCaracteresEspeciais(string input)
         {
             // Use uma expressão regular para substituir caracteres especiais por uma string vazia
