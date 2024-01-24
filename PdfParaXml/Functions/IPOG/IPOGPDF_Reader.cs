@@ -140,6 +140,7 @@ namespace PdfParaXml.Functions.IPOG
                 {
                     codExterno = consultarBancoDeDados.GetNumAtendimento(nome, dadosExame[nomeExame][1]).numAtendimento;
                 }
+
                 pedido.CodPedLab = $"002{codExterno}";
                 pedido.Nome = nome;
 
@@ -172,6 +173,15 @@ namespace PdfParaXml.Functions.IPOG
             //criadorDePlanilha.CriarPlanilhaExcel(listaDeExames, "MendelicsExel");
             var destinoDosPDFs = CreatePdfsDir("PDFs Usados\\PDFs IPOG");
             //MoverArquivos(pastaRaiz, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, destinoDosPDFs), arquivos);
+
+            var pacientesSemIDAtendimento = resultados.Pedidos.Where(p => p.CodPedLab == "002").ToList();
+
+            if (pacientesSemIDAtendimento.Count > 0)
+            {
+                Form2 form2 = new Form2(resultados);
+                form2.Show();
+            }
+
             using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine(localizacaoXML, fileName)))
             {
                 xmlSerializer.Serialize(writer, resultados);
