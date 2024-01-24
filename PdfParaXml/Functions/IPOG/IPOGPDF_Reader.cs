@@ -156,12 +156,13 @@ namespace PdfParaXml.Functions.IPOG
                 valor.Text = diagnostico;
 
                 resultados.ControleDeLote = controleDeLote;
+                pedido.nomeDoExame = superExame.ExameNome;
                 conteudo.Valor = valor;
                 resultado.Conteudo = conteudo;
                 itemDeExame.Resultado = resultado;
                 exame.ItemDeExame = exame1.ItemDeExame;
                 superExame.Exame = exame;
-                pedido.SuperExame = superExame;
+                pedido.SuperExame = superExame;               
                 resultados.Pedidos.Add(pedido);
             }
 
@@ -178,13 +179,15 @@ namespace PdfParaXml.Functions.IPOG
 
             if (pacientesSemIDAtendimento.Count > 0)
             {
-                Form2 form2 = new Form2(resultados);
+                Form2 form2 = new Form2(localizacaoXML, fileName ,resultados);
                 form2.Show();
             }
-
-            using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine(localizacaoXML, fileName)))
+            else
             {
-                xmlSerializer.Serialize(writer, resultados);
+                using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine(localizacaoXML, fileName)))
+                {
+                    xmlSerializer.Serialize(writer, resultados);
+                }
             }
         }
 
