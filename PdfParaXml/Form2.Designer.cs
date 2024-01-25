@@ -50,7 +50,7 @@ namespace PdfParaXml
             this.button1.BackColor = System.Drawing.Color.Transparent;
             this.button1.FlatAppearance.BorderSize = 2;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(561, 231);
+            this.button1.Location = new System.Drawing.Point(561, 424);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(360, 23);
             this.button1.TabIndex = 2;
@@ -63,14 +63,14 @@ namespace PdfParaXml
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(15, 25);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(906, 200);
+            this.dataGridView1.Size = new System.Drawing.Size(906, 393);
             this.dataGridView1.TabIndex = 3;
             // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(933, 266);
+            this.ClientSize = new System.Drawing.Size(933, 459);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
