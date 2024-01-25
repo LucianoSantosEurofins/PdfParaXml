@@ -10,7 +10,7 @@ using iTextSharp.text.pdf.parser;
 using PdfParaXml.TemplateXML;
 using System.Xml.Serialization;
 using PdfParaXml.Functions.CriadorDePlanilha;
-
+using System.Windows.Forms;
 
 namespace PdfParaXml.Functions.Mendelics
 {
@@ -132,6 +132,7 @@ namespace PdfParaXml.Functions.Mendelics
                 itemDeExame.Resultado = resultado;
                 exame.ItemDeExame = itemDeExame;
                 superExame.Exame = exame;
+                pedido.nomeDoExame = superExame.ExameNome;
                 pedido.SuperExame = superExame;
                 resultados.Pedidos.Add(pedido);
             }
@@ -144,9 +145,21 @@ namespace PdfParaXml.Functions.Mendelics
             //criadorDePlanilha.CriarPlanilhaExcel(listaDeExames, "MendelicsExel");
             var destinoDosPDFs = CreatePdfsDir("PDFs Usados\\PDFs Mendelics");
             MoverArquivos(pastaRaiz, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, destinoDosPDFs), arquivos);
-            using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine(localizacaoXML, fileName)))
+
+            var pacientesSemIDAtendimento = resultados.Pedidos.Where(p => p.CodPedLab == "002").ToList();
+
+            if (pacientesSemIDAtendimento.Count > 0)
             {
-                xmlSerializer.Serialize(writer, resultados);
+                Form2 form2 = new Form2(localizacaoXML, fileName,null, null, resultados);
+                form2.Show();
+            }
+            else
+            {
+                using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine(localizacaoXML, fileName)))
+                {
+                    xmlSerializer.Serialize(writer, resultados);
+                }
+                MessageBox.Show("Concluído Mendelics");
             }
         }
 

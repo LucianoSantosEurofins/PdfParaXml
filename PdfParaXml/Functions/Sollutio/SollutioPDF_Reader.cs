@@ -8,6 +8,7 @@ using iTextSharp.text.pdf.parser;
 using System.Text.RegularExpressions;
 using PdfParaXml.Functions.PDFImgCapture;
 using System.Xml.Serialization;
+using System.Windows.Forms;
 
 namespace PdfParaXml.Functions.Sollutio
 {
@@ -126,7 +127,7 @@ namespace PdfParaXml.Functions.Sollutio
 
                     pedido.CodPedLab = $"002{codExterno}"; //Colocar 002 no começo ;
                     pedido.Nome = nome;
-
+                    pedido.nomeDoExame = dadosExame[nomeExame][1];
                     superExame.MaterialNome = material;
 
                     superExame.ExameNome = dadosExame[nomeExame][1]; // ajustar para CARIOTIPO DE SANGUE PERIFÉRICO COM BANDEAMENTO G
@@ -174,10 +175,22 @@ namespace PdfParaXml.Functions.Sollutio
             //CriadorDePlanilha.CriadorDePlanilha criadorDePlanilha = new CriadorDePlanilha.CriadorDePlanilha();
             //criadorDePlanilha.CriarPlanilhaExcel(listaDeExames, "MendelicsExel");
             var destinoDosPDFs = CreatePdfsDir("PDFs Usados\\PDFs Sollutio");
-            MoverArquivos(pastaRaiz, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, destinoDosPDFs), arquivos);
-            using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine(localizacaoXML,fileName)))
+           // MoverArquivos(pastaRaiz, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, destinoDosPDFs), arquivos);
+
+            var pacientesSemIDAtendimento = resultados.Pedidos.Where(p => p.CodPedLab == "002").ToList();
+
+            if (pacientesSemIDAtendimento.Count > 0)
             {
-                xmlSerializer.Serialize(writer, resultados);
+                Form2 form2 = new Form2(localizacaoXML, fileName,null, resultados);
+                form2.Show();
+            }
+            else
+            {
+                using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine(localizacaoXML, fileName)))
+                {
+                    xmlSerializer.Serialize(writer, resultados);
+                }
+                MessageBox.Show("Concluído Sollutio");
             }
         }
 

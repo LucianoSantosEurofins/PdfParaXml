@@ -50,6 +50,8 @@ namespace PdfParaXml.TemplateSollutio
 
         [XmlElement("Nome")]
         public string Nome { get; set; }
+        [XmlIgnore]
+        public string nomeDoExame { get; set; }
 
         [XmlElement("SuperExame")]
         public SuperExame SuperExame { get; set; }

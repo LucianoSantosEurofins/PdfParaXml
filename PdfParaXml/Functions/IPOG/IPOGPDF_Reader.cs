@@ -163,7 +163,7 @@ namespace PdfParaXml.Functions.IPOG
                 exame.ItemDeExame = exame1.ItemDeExame;
                 superExame.Exame = exame;
                 pedido.SuperExame = superExame;               
-                resultados.Pedidos.Add(pedido);
+                resultados.Pedidos.Add(pedido);  
             }
 
             //var listaDeExames = resultados.Pedidos.Select(p => new ModeloDePDFEExemplo { ExameNome = p.SuperExame.ExameNome, fileName = p.fileName }).GroupBy(Ex => Ex.ExameNome).Select(g => g.First()).ToList();

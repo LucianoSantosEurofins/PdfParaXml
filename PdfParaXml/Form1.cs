@@ -55,8 +55,6 @@ namespace PdfParaXml
                 config.Save(ConfigurationSaveMode.Modified);
                 ConfigurationManager.RefreshSection("appSettings");
             }
-
-            MessageBox.Show("Concluído ");
         }
 
         private void btn_SelectFolderMendelics_Click(object sender, EventArgs e)
