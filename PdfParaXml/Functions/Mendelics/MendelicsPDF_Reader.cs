@@ -144,8 +144,7 @@ namespace PdfParaXml.Functions.Mendelics
             //CriadorDePlanilha.CriadorDePlanilha criadorDePlanilha = new CriadorDePlanilha.CriadorDePlanilha();
             //criadorDePlanilha.CriarPlanilhaExcel(listaDeExames, "MendelicsExel");
             var destinoDosPDFs = CreatePdfsDir("PDFs Usados\\PDFs Mendelics");
-            MoverArquivos(pastaRaiz, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, destinoDosPDFs), arquivos);
-
+            
             var pacientesSemIDAtendimento = resultados.Pedidos.Where(p => p.CodPedLab == "002").ToList();
 
             if (pacientesSemIDAtendimento.Count > 0)
@@ -161,6 +160,7 @@ namespace PdfParaXml.Functions.Mendelics
                 }
                 MessageBox.Show("Concluído Mendelics");
             }
+            MoverArquivos(pastaRaiz, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, destinoDosPDFs), arquivos);
         }
 
         static void MoverArquivos(string origem, string destino, string[] arquivos)

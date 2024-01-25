@@ -173,7 +173,6 @@ namespace PdfParaXml.Functions.IPOG
             //CriadorDePlanilha.CriadorDePlanilha criadorDePlanilha = new CriadorDePlanilha.CriadorDePlanilha();
             //criadorDePlanilha.CriarPlanilhaExcel(listaDeExames, "MendelicsExel");
             var destinoDosPDFs = CreatePdfsDir("PDFs Usados\\PDFs IPOG");
-            //MoverArquivos(pastaRaiz, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, destinoDosPDFs), arquivos);
 
             var pacientesSemIDAtendimento = resultados.Pedidos.Where(p => p.CodPedLab == "002").ToList();
 
@@ -189,6 +188,7 @@ namespace PdfParaXml.Functions.IPOG
                     xmlSerializer.Serialize(writer, resultados);
                 }
             }
+            MoverArquivos(pastaRaiz, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, destinoDosPDFs), arquivos);
         }
 
         private string RemoverQuebrasDeLinha(string texto, string nomePaciente)

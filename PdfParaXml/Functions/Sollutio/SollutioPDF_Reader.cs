@@ -175,7 +175,6 @@ namespace PdfParaXml.Functions.Sollutio
             //CriadorDePlanilha.CriadorDePlanilha criadorDePlanilha = new CriadorDePlanilha.CriadorDePlanilha();
             //criadorDePlanilha.CriarPlanilhaExcel(listaDeExames, "MendelicsExel");
             var destinoDosPDFs = CreatePdfsDir("PDFs Usados\\PDFs Sollutio");
-           // MoverArquivos(pastaRaiz, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, destinoDosPDFs), arquivos);
 
             var pacientesSemIDAtendimento = resultados.Pedidos.Where(p => p.CodPedLab == "002").ToList();
 
@@ -192,6 +191,7 @@ namespace PdfParaXml.Functions.Sollutio
                 }
                 MessageBox.Show("Concluído Sollutio");
             }
+            MoverArquivos(pastaRaiz, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, destinoDosPDFs), arquivos);
         }
 
         private Dictionary<string, List<string>> getExamesDict()
