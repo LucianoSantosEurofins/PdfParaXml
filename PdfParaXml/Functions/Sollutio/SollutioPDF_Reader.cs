@@ -170,8 +170,8 @@ namespace PdfParaXml.Functions.Sollutio
 
             //var listaDeExames = resultados.Pedidos.Select(p => new ModeloDePDFEExemplo { ExameNome = p.SuperExame.ExameNome, fileName = p.fileName }).GroupBy(Ex => Ex.ExameNome).Select(g => g.First()).ToList();
             XmlSerializer xmlSerializer = new XmlSerializer(resultados.GetType());
-            xmlSerializer.Serialize(Console.Out, resultados);
-            var fileName = "ResultadosSollutio.XML"; //System.IO.Path.GetFileName("Lote teste").Replace(".pdf", ".XML");
+            xmlSerializer.Serialize(Console.Out, resultados);           
+            var fileName = $"ResultadosSollutio{DateTime.Now.ToString("dd_MM_yyyyy")}.XML"; //System.IO.Path.GetFileName("Lote teste").Replace(".pdf", ".XML");
             //CriadorDePlanilha.CriadorDePlanilha criadorDePlanilha = new CriadorDePlanilha.CriadorDePlanilha();
             //criadorDePlanilha.CriarPlanilhaExcel(listaDeExames, "MendelicsExel");
             var destinoDosPDFs = CreatePdfsDir("PDFs Usados\\PDFs Sollutio");

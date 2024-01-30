@@ -140,7 +140,7 @@ namespace PdfParaXml.Functions.Mendelics
             var listaDeExames = resultados.Pedidos.Select(p => new ModeloDePDFEExemplo { ExameNome = p.SuperExame.ExameNome, fileName = p.fileName }).GroupBy(Ex => Ex.ExameNome).Select(g => g.First()).ToList();
             XmlSerializer xmlSerializer = new XmlSerializer(resultados.GetType());
             xmlSerializer.Serialize(Console.Out, resultados);
-            var fileName = "ResultadosMendelics.XML"; //System.IO.Path.GetFileName("Lote teste").Replace(".pdf", ".XML");
+            var fileName = $"ResultadosMendelics{DateTime.Now.ToString("dd_MM_yyyy")}.XML"; //System.IO.Path.GetFileName("Lote teste").Replace(".pdf", ".XML");
             //CriadorDePlanilha.CriadorDePlanilha criadorDePlanilha = new CriadorDePlanilha.CriadorDePlanilha();
             //criadorDePlanilha.CriarPlanilhaExcel(listaDeExames, "MendelicsExel");
             var destinoDosPDFs = CreatePdfsDir("PDFs Usados\\PDFs Mendelics");
@@ -165,13 +165,10 @@ namespace PdfParaXml.Functions.Mendelics
 
         static void MoverArquivos(string origem, string destino, string[] arquivos)
         {
-
             foreach (var arquivo in arquivos)
             {
                 string caminhoOrigem = System.IO.Path.Combine(origem, arquivo);
                 string caminhoDestino = System.IO.Path.Combine(destino, System.IO.Path.GetFileName(arquivo));
-
-                // Use o método Move da classe File para mover o arquivo
                 File.Move(caminhoOrigem, caminhoDestino);
             }
         }
