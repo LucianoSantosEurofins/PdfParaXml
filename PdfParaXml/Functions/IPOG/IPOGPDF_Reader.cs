@@ -148,7 +148,7 @@ namespace PdfParaXml.Functions.IPOG
                 
                 superExame.ExameNome = dadosExame[nomeExame][1];
                 superExame.CodExmApoio = $"{dadosExame[nomeExame][1]}|{dadosExame[nomeExame][2]}|1";
-                superExame.CodigoFormato = 1;
+                superExame.CodigoFormato = superExame.ExameNome.Contains("HPV CAPTURA HÍBRIDA (ALTO RISCO)") ? 2019 : 1;
 
                 exame.Metodo = metodo;
 
@@ -169,7 +169,7 @@ namespace PdfParaXml.Functions.IPOG
             //var listaDeExames = resultados.Pedidos.Select(p => new ModeloDePDFEExemplo { ExameNome = p.SuperExame.ExameNome, fileName = p.fileName }).GroupBy(Ex => Ex.ExameNome).Select(g => g.First()).ToList();
             XmlSerializer xmlSerializer = new XmlSerializer(resultados.GetType());
             xmlSerializer.Serialize(Console.Out, resultados);
-            var fileName = "ResultadosIPOG.XML"; //System.IO.Path.GetFileName("Lote teste").Replace(".pdf", ".XML");
+            var fileName = $"ResultadosIPOG{DateTime.Now.ToString("dd_MM_yyyyy")}.XML"; //System.IO.Path.GetFileName("Lote teste").Replace(".pdf", ".XML");
             //CriadorDePlanilha.CriadorDePlanilha criadorDePlanilha = new CriadorDePlanilha.CriadorDePlanilha();
             //criadorDePlanilha.CriarPlanilhaExcel(listaDeExames, "MendelicsExel");
             var destinoDosPDFs = CreatePdfsDir("PDFs Usados\\PDFs IPOG");
@@ -504,8 +504,20 @@ namespace PdfParaXml.Functions.IPOG
                 case "HPVB":
                     var resultadosHPVAltoRisco = getResultadosHPVAltoRisco(resultadoTxt, nomePaciente);
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CAPTURA"});
+                    var CAPTURAalto = resultadosHPVAltoRisco.First(r => r.nome == "ALTO RISCO");
+                    itens[0].Resultado = new TemplateIPOG.Resultado() { Conteudo = new TemplateIPOG.Conteudo() { Valor = getFormatacaoValor() } };
+                    itens[0].Resultado.Conteudo.Valor.Text = CAPTURAalto.resultado;
+
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "RLUPC1" });
+                    var RLUPC1alto = resultadosHPVAltoRisco.First(r => r.nome == "ALTO RISCO");
+                    itens[1].Resultado = new TemplateIPOG.Resultado() { Conteudo = new TemplateIPOG.Conteudo() { Valor = getFormatacaoValor() } };
+                    itens[1].Resultado.Conteudo.Valor.Text = RLUPC1alto.RLUPCAlto;
+
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "CONCL"  });
+                    var Conclus = resultadosHPVAltoRisco.First(r => r.nome == "ALTO RISCO");
+                    itens[2].Resultado = new TemplateIPOG.Resultado() { Conteudo = new TemplateIPOG.Conteudo() { Valor = getFormatacaoValor() } };
+                    itens[2].Resultado.Conteudo.Valor.Text = Conclus.variavel;
+
                     itens.Add(new TemplateIPOG.ItemDeExame() { Nome = "NOTA"   });
                     break;
             }
