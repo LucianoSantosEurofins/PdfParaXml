@@ -119,7 +119,6 @@ namespace PdfParaXml.Functions.IPOG
                                 var resultadoComTratamento = RemoverQuebrasDeLinha(resultadoSemTratamento, nome);
                                 exame1.ItemDeExame = getResultadosComVariaveisDefinidas(nomeDoExame, resultadoComTratamento, nome);
                             }
-
                         }
                     }
                 }
