@@ -90,19 +90,19 @@ namespace PdfParaXml.Functions.Sollutio
                         }
 
                         if (line.Contains("Interpretação:"))
-                            interpretacao = getInterPretacao(textConted, reader);
+                            interpretacao = nomeExame.Contains("CARIÓTIPO HEMATOLÓGICO") ? line.Replace("Interpretação:", "") : getInterPretacao(textConted, reader);
 
                         if (line.Contains("Resultado:"))
                             resultadoTxt = getResultado(line);
 
                         if (line.Contains("Método:"))
-                            material = $"{pdfLines[pdfLines.IndexOf(line) - 1]} {pdfLines[pdfLines.IndexOf(line) + 1]}";
+                            material = $"{pdfLines[pdfLines.IndexOf(line) - 1]} {pdfLines[pdfLines.IndexOf(line) + 1]}".Replace("Material:", "");
 
                         if (line.Contains("Bandeamento:"))
-                            bandeamento = pdfLines[pdfLines.IndexOf(line) + 1];
+                            bandeamento = nomeExame.Contains("CARIÓTIPO HEMATOLÓGICO") ? line.Replace("Bandeamento:", "") : pdfLines[pdfLines.IndexOf(line) + 1];
 
                         if(line.Contains("Total de Células"))
-                            numDeCelulas = pdfLines[pdfLines.IndexOf(line) + 1];
+                            numDeCelulas = nomeExame.Contains("CARIÓTIPO HEMATOLÓGICO") ? line.Replace("Total de Células Analisadas:", "") : pdfLines[pdfLines.IndexOf(line) + 1];
                     }
 
                     //Capturar resultado de imagem
@@ -225,7 +225,14 @@ namespace PdfParaXml.Functions.Sollutio
                 string caminhoDestino = System.IO.Path.Combine(destino, System.IO.Path.GetFileName(arquivo));
 
                 // Use o método Move da classe File para mover o arquivo
-                File.Move(caminhoOrigem, caminhoDestino);
+                try
+                {
+                    File.Move(caminhoOrigem, caminhoDestino);
+                }
+                catch
+                {
+                    MessageBox.Show("Erro ao mover arquivos");
+                }
             }
         }
 
