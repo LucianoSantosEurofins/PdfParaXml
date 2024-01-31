@@ -11,7 +11,7 @@ namespace PdfParaXml.Functions
 {
     public class ConsultarBancoDeDados
     {
-        public ResultadoConsultaExame GetNumAtendimento(string nomePaciente,string examePleres , string connectionString = "Server=CATGSRV-LD02;Database=Pleres-CentroDeGenomas;User Id=luciano.oliveira;Password=Eurofins$#@!2023;TRUSTED_CONNECTION = TRUE;")
+        public ResultadoConsultaExame GetNumAtendimento(string nomePaciente,string examePleres , string connectionString = "Server=CATGSRV-LD02;Database=Pleres-CentroDeGenomas;User Id=luciano.oliveira;Password=Eurofins$#@!2023;")
         {
             ResultadoConsultaExame resultadoConsultaExame = new ResultadoConsultaExame();
             try
