@@ -169,7 +169,14 @@ namespace PdfParaXml.Functions.Mendelics
             {
                 string caminhoOrigem = System.IO.Path.Combine(origem, arquivo);
                 string caminhoDestino = System.IO.Path.Combine(destino, System.IO.Path.GetFileName(arquivo));
-                File.Move(caminhoOrigem, caminhoDestino);
+                try
+                {
+                    File.Move(caminhoOrigem, caminhoDestino);
+                }
+                catch
+                {
+                    MessageBox.Show("Erro ao mover arquivos");
+                }
             }
         }
 

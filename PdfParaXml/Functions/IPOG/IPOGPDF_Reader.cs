@@ -11,6 +11,7 @@ using PdfParaXml.TemplateXML;
 using System.Xml.Serialization;
 using PdfParaXml.Functions.CriadorDePlanilha;
 using static PdfParaXml.TemplateXML.TemplateIPOG;
+using System.Windows.Forms;
 
 namespace PdfParaXml.Functions.IPOG
 {
@@ -603,7 +604,14 @@ namespace PdfParaXml.Functions.IPOG
                 string caminhoOrigem = System.IO.Path.Combine(origem, arquivo);
                 string caminhoDestino = System.IO.Path.Combine(destino, System.IO.Path.GetFileName(arquivo));
                 // Use o método Move da classe File para mover o arquivo
-                File.Move(caminhoOrigem, caminhoDestino);
+                try
+                {
+                    File.Move(caminhoOrigem, caminhoDestino);
+                }
+                catch
+                {
+                    MessageBox.Show("Erro ao mover arquivos");
+                }
             }
         }
 

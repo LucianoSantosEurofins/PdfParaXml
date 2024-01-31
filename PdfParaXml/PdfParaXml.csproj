@@ -235,7 +235,6 @@
     <Compile Include="Functions\ConsultarBancoDeDados.cs" />
     <Compile Include="Functions\CriadorDePlanilha\CriadorDePlanilha.cs" />
     <Compile Include="Functions\IPOG\IPOGPDF_Reader.cs" />
-    <Compile Include="Functions\Mendelics\MendelicsObj.cs" />
     <Compile Include="Functions\Mendelics\MendelicsPDF_Reader.cs" />
     <Compile Include="Functions\PDFImgCapture\PDF_ImgCapture.cs" />
     <Compile Include="Functions\Sollutio\SollutioPDF_Reader.cs" />
