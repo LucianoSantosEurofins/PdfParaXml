@@ -93,10 +93,10 @@ namespace PdfParaXml.Functions.Sollutio
                             interpretacao = nomeExame.Contains("CARIÓTIPO HEMATOLÓGICO") ? line.Replace("Interpretação:", "") : getInterPretacao(textConted, reader);
 
                         if (line.Contains("Resultado:"))
-                            resultadoTxt = getResultado(line);
+                            resultadoTxt =  getResultado(line);
 
                         if (line.Contains("Método:"))
-                            material = $"{pdfLines[pdfLines.IndexOf(line) - 1]} {pdfLines[pdfLines.IndexOf(line) + 1]}".Replace("Material:", "");
+                            material = nomeExame.Contains("CARIÓTIPO HEMATOLÓGICO") ? line.Replace("Método:", "") : $"{pdfLines[pdfLines.IndexOf(line) - 1]} {pdfLines[pdfLines.IndexOf(line) + 1]}";
 
                         if (line.Contains("Bandeamento:"))
                             bandeamento = nomeExame.Contains("CARIÓTIPO HEMATOLÓGICO") ? line.Replace("Bandeamento:", "") : pdfLines[pdfLines.IndexOf(line) + 1];
