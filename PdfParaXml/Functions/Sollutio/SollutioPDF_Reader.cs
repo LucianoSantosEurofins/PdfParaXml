@@ -134,34 +134,16 @@ namespace PdfParaXml.Functions.Sollutio
                     superExame.CodExmApoio = $"{dadosExame[nomeExame][1]}|{dadosExame[nomeExame][2]}|1";// Concatenar nome do exame | abreviação | 1;
                     superExame.CodigoFormato = 1;
                     
-
                     exame.Metodo = metodo;
-                    itemDeExame.Add(new ItemDeExame { Nome = "RESULT",
-                                                      Resultado = resultado});
 
-                    itemDeExame.Add(new ItemDeExame { Nome = "NUMERO",
-                                                      Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = getFormatacaoValor()}}});
-                    itemDeExame[1].Resultado.Conteudo.Valor.Text = numDeCelulas;
-
-                    itemDeExame.Add(new ItemDeExame{Nome = "RES",
-                                                    Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = getFormatacaoValor()}}});
-                    itemDeExame[2].Resultado.Conteudo.Valor.Text = bandeamento;
-
-                    itemDeExame.Add(new ItemDeExame{Nome = "INTERP",
-                                                    Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = getFormatacaoValor()}}});
-                    itemDeExame[3].Resultado.Conteudo.Valor.Text = interpretacao;
-
-                    itemDeExame.Add(new ItemDeExame{Nome = "IMAGEM",
-                                                    Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = getFormatacaoValor() } }});
-                    itemDeExame[4].Resultado.Conteudo.Valor.Text = Convert.ToBase64String(img);
-
+                    var resultadosLista = new List<string> { numDeCelulas, bandeamento, interpretacao, material, Convert.ToBase64String(img) }; 
                     valor = getFormatacaoValor();
                     valor.Text = resultadoTxt;
 
                     resultados.ControleDeLote = controleDeLote;
                     conteudo.Valor = valor;
                     resultado.Conteudo = conteudo;
-                    exame.ItemDeExame = itemDeExame;
+                    exame.ItemDeExame = getResultadosComVariaveisDefinidas(dadosExame[nomeExame][2], resultadosLista, resultado, nome);
                     superExame.Exame = exame;
                     pedido.SuperExame = superExame;
                     resultados.Pedidos.Add(pedido);
@@ -193,8 +175,33 @@ namespace PdfParaXml.Functions.Sollutio
             }
             MoverArquivos(pastaRaiz, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, destinoDosPDFs), arquivos);
         }
+        private List<TemplateSollutio.ItemDeExame> getResultadosComVariaveisDefinidas(string exame, List<string> resultados, Resultado resultado ,string nomePaciente)
+        {
+            var itens = new List<TemplateSollutio.ItemDeExame>();
+            var formatacao = getFormatacaoValor();
+            switch (exame)
+            {
+                case "CARIHEMA":
+                    itens.Add(new ItemDeExame { Nome = "RES", Resultado = resultado });
+                    itens.Add(new ItemDeExame { Nome = "MET", Resultado = new Resultado()    { Conteudo = new Conteudo() { Valor = new Valor() { Text = resultados[3], CasasDecimais = formatacao.CasasDecimais, TamanhoMaximo = formatacao.TamanhoMaximo, Tipo = formatacao.Tipo } } } });
+                    itens.Add(new ItemDeExame { Nome = "RESOLU", Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = new Valor() { Text = resultados[1], CasasDecimais = formatacao.CasasDecimais, TamanhoMaximo = formatacao.TamanhoMaximo, Tipo = formatacao.Tipo } } } });
+                    itens.Add(new ItemDeExame { Nome = "NUMERO", Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = new Valor() { Text = resultados[0], CasasDecimais = formatacao.CasasDecimais, TamanhoMaximo = formatacao.TamanhoMaximo, Tipo = formatacao.Tipo } } } });
+                    itens.Add(new ItemDeExame { Nome = "OBS", Resultado = new Resultado()    { Conteudo = new Conteudo() { Valor = new Valor() { Text = resultados[2], CasasDecimais = formatacao.CasasDecimais, TamanhoMaximo = formatacao.TamanhoMaximo, Tipo = formatacao.Tipo } } } });
+                    itens.Add(new ItemDeExame { Nome = "IMAGEM", Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = new Valor() { Text = resultados[4], CasasDecimais = formatacao.CasasDecimais, TamanhoMaximo = formatacao.TamanhoMaximo, Tipo = formatacao.Tipo } } } });
+                    break;
 
-        private Dictionary<string, List<string>> getExamesDict()
+                case "CG_CONSTCATG":
+                    itens.Add(new ItemDeExame { Nome = "RESULT", Resultado = resultado });
+                    itens.Add(new ItemDeExame { Nome = "RES", Resultado = new Resultado()    { Conteudo = new Conteudo() { Valor = new Valor() { Text = resultados[1], CasasDecimais = formatacao.CasasDecimais, TamanhoMaximo = formatacao.TamanhoMaximo, Tipo = formatacao.Tipo } } } });
+                    itens.Add(new ItemDeExame { Nome = "NUMERO", Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = new Valor() { Text = resultados[0], CasasDecimais = formatacao.CasasDecimais, TamanhoMaximo = formatacao.TamanhoMaximo, Tipo = formatacao.Tipo } } } });
+                    itens.Add(new ItemDeExame { Nome = "INTERP", Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = new Valor() { Text = resultados[2], CasasDecimais = formatacao.CasasDecimais, TamanhoMaximo = formatacao.TamanhoMaximo, Tipo = formatacao.Tipo } } } });
+                    itens.Add(new ItemDeExame { Nome = "IMAGEM", Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = new Valor() { Text = resultados[4], CasasDecimais = formatacao.CasasDecimais, TamanhoMaximo = formatacao.TamanhoMaximo, Tipo = formatacao.Tipo } } } });
+                    break;
+            }
+            return itens;
+        }
+
+            private Dictionary<string, List<string>> getExamesDict()
         {
             var examsDict = new Dictionary<string, List<string>>();
             examsDict.Add("CARIÓTIPO CONSTITUCIONAL", new List<string>() { "BANDGSP", "CARIOTIPO DE SANGUE PERIFÉRICO COM BANDEAMENTO G", "CG_CONSTCATG" });              
