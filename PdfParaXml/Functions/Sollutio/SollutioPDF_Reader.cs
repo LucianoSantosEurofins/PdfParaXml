@@ -17,9 +17,6 @@ namespace PdfParaXml.Functions.Sollutio
         public void SollutioPDFToXML(string pastaRaiz, string localizacaoXML)
         {
             string outputFilePath = Directory.GetCurrentDirectory(); ;
-            //string pastaRaiz = @"C:\Users\d9lb\Desktop\TestesPdf\Mendelics\";
-            //string pastaRaiz = @"C:\Users\d9lb\OneDrive - Eurofins\Área de Trabalho\TestesPdf\Sollutio";
-
             string[] arquivos = Directory.GetFiles(pastaRaiz, "*.pdf");
             Resultados resultados = new Resultados();
             resultados.Pedidos = new List<Pedido>();
@@ -36,8 +33,6 @@ namespace PdfParaXml.Functions.Sollutio
                 Resultado resultado = new Resultado();
                 Valor valor = new Valor();
                 Conteudo conteudo = new Conteudo();
-
-                //XML Pardini
 
                 string nome = "";
                 string sexo = "";
@@ -117,7 +112,7 @@ namespace PdfParaXml.Functions.Sollutio
                     controleDeLote.CodLab = cliente;
 
                     pedido.fileName = arquivo;
-                    pedido.CodPedApoio = requisicao; //Provavelmente precisara ser ajustado futuramente
+                    pedido.CodPedApoio = requisicao;
 
                     Regex regex = new Regex(@"^\d+$");
                     ConsultarBancoDeDados consultarBancoDeDados = new ConsultarBancoDeDados();
@@ -128,14 +123,13 @@ namespace PdfParaXml.Functions.Sollutio
                     pedido.CodPedLab = $"002{codExterno}"; //Colocar 002 no começo ;
                     pedido.Nome = nome;
                     pedido.nomeDoExame = dadosExame[nomeExame][1];
-                    superExame.MaterialNome = material;
 
-                    superExame.ExameNome = dadosExame[nomeExame][1]; // ajustar para CARIOTIPO DE SANGUE PERIFÉRICO COM BANDEAMENTO G
+                    superExame.MaterialNome = material;
+                    superExame.ExameNome = dadosExame[nomeExame][1];
                     superExame.CodExmApoio = $"{dadosExame[nomeExame][1]}|{dadosExame[nomeExame][2]}|1";// Concatenar nome do exame | abreviação | 1;
                     superExame.CodigoFormato = 1;
                     
                     exame.Metodo = metodo;
-
                     var resultadosLista = new List<string> { numDeCelulas, bandeamento, interpretacao, material, Convert.ToBase64String(img) }; 
                     valor = getFormatacaoValor();
                     valor.Text = resultadoTxt;
@@ -182,17 +176,17 @@ namespace PdfParaXml.Functions.Sollutio
             switch (exame)
             {
                 case "CARIHEMA":
-                    itens.Add(new ItemDeExame { Nome = "RES", Resultado = resultado });
-                    itens.Add(new ItemDeExame { Nome = "MET", Resultado = new Resultado()    { Conteudo = new Conteudo() { Valor = new Valor() { Text = resultados[3], CasasDecimais = formatacao.CasasDecimais, TamanhoMaximo = formatacao.TamanhoMaximo, Tipo = formatacao.Tipo } } } });
+                    itens.Add(new ItemDeExame { Nome = "RES",    Resultado = resultado });
+                    itens.Add(new ItemDeExame { Nome = "MET",    Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = new Valor() { Text = resultados[3], CasasDecimais = formatacao.CasasDecimais, TamanhoMaximo = formatacao.TamanhoMaximo, Tipo = formatacao.Tipo } } } });
                     itens.Add(new ItemDeExame { Nome = "RESOLU", Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = new Valor() { Text = resultados[1], CasasDecimais = formatacao.CasasDecimais, TamanhoMaximo = formatacao.TamanhoMaximo, Tipo = formatacao.Tipo } } } });
                     itens.Add(new ItemDeExame { Nome = "NUMERO", Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = new Valor() { Text = resultados[0], CasasDecimais = formatacao.CasasDecimais, TamanhoMaximo = formatacao.TamanhoMaximo, Tipo = formatacao.Tipo } } } });
-                    itens.Add(new ItemDeExame { Nome = "OBS", Resultado = new Resultado()    { Conteudo = new Conteudo() { Valor = new Valor() { Text = resultados[2], CasasDecimais = formatacao.CasasDecimais, TamanhoMaximo = formatacao.TamanhoMaximo, Tipo = formatacao.Tipo } } } });
+                    itens.Add(new ItemDeExame { Nome = "OBS",    Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = new Valor() { Text = resultados[2], CasasDecimais = formatacao.CasasDecimais, TamanhoMaximo = formatacao.TamanhoMaximo, Tipo = formatacao.Tipo } } } });
                     itens.Add(new ItemDeExame { Nome = "IMAGEM", Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = new Valor() { Text = resultados[4], CasasDecimais = formatacao.CasasDecimais, TamanhoMaximo = formatacao.TamanhoMaximo, Tipo = formatacao.Tipo } } } });
                     break;
 
                 case "CG_CONSTCATG":
                     itens.Add(new ItemDeExame { Nome = "RESULT", Resultado = resultado });
-                    itens.Add(new ItemDeExame { Nome = "RES", Resultado = new Resultado()    { Conteudo = new Conteudo() { Valor = new Valor() { Text = resultados[1], CasasDecimais = formatacao.CasasDecimais, TamanhoMaximo = formatacao.TamanhoMaximo, Tipo = formatacao.Tipo } } } });
+                    itens.Add(new ItemDeExame { Nome = "RES",    Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = new Valor() { Text = resultados[1], CasasDecimais = formatacao.CasasDecimais, TamanhoMaximo = formatacao.TamanhoMaximo, Tipo = formatacao.Tipo } } } });
                     itens.Add(new ItemDeExame { Nome = "NUMERO", Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = new Valor() { Text = resultados[0], CasasDecimais = formatacao.CasasDecimais, TamanhoMaximo = formatacao.TamanhoMaximo, Tipo = formatacao.Tipo } } } });
                     itens.Add(new ItemDeExame { Nome = "INTERP", Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = new Valor() { Text = resultados[2], CasasDecimais = formatacao.CasasDecimais, TamanhoMaximo = formatacao.TamanhoMaximo, Tipo = formatacao.Tipo } } } });
                     itens.Add(new ItemDeExame { Nome = "IMAGEM", Resultado = new Resultado() { Conteudo = new Conteudo() { Valor = new Valor() { Text = resultados[4], CasasDecimais = formatacao.CasasDecimais, TamanhoMaximo = formatacao.TamanhoMaximo, Tipo = formatacao.Tipo } } } });
@@ -224,8 +218,7 @@ namespace PdfParaXml.Functions.Sollutio
         }
 
         static void MoverArquivos(string origem, string destino, string[] arquivos)
-        {
-            
+        {          
             foreach (var arquivo in arquivos)
             {
                 string caminhoOrigem = System.IO.Path.Combine(origem, arquivo);
@@ -276,18 +269,17 @@ namespace PdfParaXml.Functions.Sollutio
 
         private string getResultado(string pdfContend)
         {
-            
-                string metodoPatern = @"(?<=Resultado:).*$";
-                Match match = Regex.Match(pdfContend, metodoPatern);
+            string metodoPatern = @"(?<=Resultado:).*$";
+            Match match = Regex.Match(pdfContend, metodoPatern);
 
-                if (match.Success)
-                {
-                    return match.Value;
-                }
-                else
-                {
-                    return "";
-                }
+            if (match.Success)
+            {
+                return match.Value;
+            }
+            else
+            {
+                return "";
+            }
         }
 
         private string getInterPretacao(string pdfContend, PdfReader reader)

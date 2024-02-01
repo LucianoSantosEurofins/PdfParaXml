@@ -280,7 +280,6 @@ namespace PdfParaXml.Functions.IPOG
             return listaOrdenada;
         }
 
-
         private string getResultadoInterPretacao(string pdfContend, string reader)
         {
             string startWord = "RESULTADO";

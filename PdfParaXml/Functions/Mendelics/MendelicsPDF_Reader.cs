@@ -16,7 +16,6 @@ namespace PdfParaXml.Functions.Mendelics
 {
     public class MendelicsPDF_Reader
     {
-
         public void MendelixPDFsTOXML(string pastaRaiz, string localizacaoXML)
         {
             string outputFilePath = Directory.GetCurrentDirectory(); ;
@@ -51,8 +50,6 @@ namespace PdfParaXml.Functions.Mendelics
 
                 using (PdfReader reader = new PdfReader(arquivo))
                 {
-                    //using (StreamWriter writer = new StreamWriter(outputFilePath))
-                    //{
                         var textConted = getPdfText(reader);
                         var pdfLines = textConted.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 

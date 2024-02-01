@@ -46,8 +46,7 @@ namespace PdfParaXml
                 var dtg = new BindingList<TemplateXML.Pedido>(resultadosMendelics.Pedidos.Where(p => p.CodPedLab == "002").ToList());
                 this.dataGridView1.DataSource = dtg;
             }
-
-            
+           
             TemplateIPOG     = resultadosIpog;
             TemplateSollutio = resultadosSollutio;
             TemplateXML = resultadosMendelics;
@@ -118,7 +117,6 @@ namespace PdfParaXml
                 }
                 MessageBox.Show("Concluído Mendelics ");
             }
-
             this.Close();
         }
     }
