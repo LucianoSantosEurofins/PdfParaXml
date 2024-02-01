@@ -60,7 +60,8 @@ namespace PdfParaXml
 
             this.dataGridView1.Columns["Nome"].Width = 300;
             this.dataGridView1.Columns["Nome"].ReadOnly = true;
-            this.dataGridView1.Columns["nomeDoExame"].Width = 300;
+            this.dataGridView1.Columns["nomeDoExame"].ReadOnly = true;
+            this.dataGridView1.Columns["nomeDoExame"].Width = 320;
         }
         private void button1_Click(object sender, EventArgs e)
         {
