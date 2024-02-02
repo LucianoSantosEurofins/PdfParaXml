@@ -72,7 +72,9 @@ namespace PdfParaXml
                 result.IdExame      = (string)dataGridView1.Rows[index].Cells[2].Value;
                 listaResultados.Add(result);
             }
-            
+
+            listaResultados.Remove(listaResultados.First(lr => string.IsNullOrEmpty(lr.nomePaciente)));
+
             if (TemplateIPOG != null)
             {
                 foreach (var r in listaResultados)

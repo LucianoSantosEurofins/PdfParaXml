@@ -237,6 +237,7 @@
     <Compile Include="Functions\IPOG\IPOGPDF_Reader.cs" />
     <Compile Include="Functions\Mendelics\MendelicsPDF_Reader.cs" />
     <Compile Include="Functions\PDFImgCapture\PDF_ImgCapture.cs" />
+    <Compile Include="Functions\SharedFunctionalities.cs" />
     <Compile Include="Functions\Sollutio\SollutioPDF_Reader.cs" />
     <Compile Include="objBancoDeDados\ResultadoConsultaExame.cs" />
     <Compile Include="Program.cs" />
