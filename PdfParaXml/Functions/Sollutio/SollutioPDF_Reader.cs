@@ -194,8 +194,7 @@ namespace PdfParaXml.Functions.Sollutio
             }
             return itens;
         }
-
-            private Dictionary<string, List<string>> getExamesDict()
+         private Dictionary<string, List<string>> getExamesDict()
         {
             var examsDict = new Dictionary<string, List<string>>();
             examsDict.Add("CARIÓTIPO CONSTITUCIONAL", new List<string>() { "BANDGSP", "CARIOTIPO DE SANGUE PERIFÉRICO COM BANDEAMENTO G", "CG_CONSTCATG" });              
