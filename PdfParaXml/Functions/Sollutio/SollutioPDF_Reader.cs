@@ -16,7 +16,7 @@ namespace PdfParaXml.Functions.Sollutio
     {
         public void SollutioPDFToXML(string pastaRaiz, string localizacaoXML)
         {
-            string outputFilePath = Directory.GetCurrentDirectory(); ;
+            string outputFilePath = Directory.GetCurrentDirectory();
             string[] arquivos = Directory.GetFiles(pastaRaiz, "*.pdf");
             Resultados resultados = new Resultados();
             resultados.Pedidos = new List<Pedido>();
