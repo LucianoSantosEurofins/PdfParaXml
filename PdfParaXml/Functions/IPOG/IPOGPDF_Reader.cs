@@ -294,7 +294,7 @@ namespace PdfParaXml.Functions.IPOG
                 if (resultado.Contains("RESULTADO"))
                 {
                     string resultadoInter = getResultadoInterPretacao(txtContend, txtContend).Replace(":", ""); //txtContend[txtContend.IndexOf("RESULTADO") : 2];
-                    string ConclusaoInter = getResultadoConclusao(txtContend, txtContend).Replace(":", ""); //txtContend[txtContend.IndexOf("RESULTADO") : 2];
+                    string ConclusaoInter = getResultadoConclusao(txtContend, txtContend, resultados).Replace(":", ""); //txtContend[txtContend.IndexOf("RESULTADO") : 2];
                     listaOrdenada.Add(new ObjResultado() { nome = "CAPTURA", resultado = resultadoInter, variavel = ConclusaoInter });
                 }
             }
@@ -321,8 +321,14 @@ namespace PdfParaXml.Functions.IPOG
             }
         }
 
-        private string getResultadoConclusao(string pdfContend, string reader)
+        static string RemoveSpecialChars(string input)
         {
+            // Remove os caracteres :;,. utilizando Replace
+            return input.Replace(":", "").Replace(";", "").Replace(",", "").Replace(".", "");
+        }
+
+        private string getResultadoConclusao(string pdfContend, string reader, List<string> resultados)
+        {           
             string startWord = "CONCLUSÃO";
             string endWord = ".";
             pdfContend = reader;
@@ -331,9 +337,12 @@ namespace PdfParaXml.Functions.IPOG
 
             if (startIndex != -1 && endIndex != -1)
             {
-                int startIndexToUse = startIndex + startWord.Length;
+                int startIndexToUse = startIndex + startWord.Length;               
                 string result = pdfContend.Substring(startIndexToUse, endIndex - startIndexToUse).Trim();
-                return result.Replace("Interpretação:", "");
+                var restanteConclusaoParte1 = resultados[resultados.IndexOf(resultados.First(r => r.Contains(RemoveSpecialChars(result)))) - 1];
+                var parte2 = result.Replace("Interpretação:", "");
+                var resultadoRetorno = restanteConclusaoParte1.Contains("NEGATIVO") || restanteConclusaoParte1.Contains("POSITIVO") ? parte2.Replace(":", "") :  $"{restanteConclusaoParte1}{parte2}".Replace("CONCLUSÃO", "").Replace("Interpretação:", "").Replace(":", "");
+                return resultadoRetorno;
             }
             else
             {
