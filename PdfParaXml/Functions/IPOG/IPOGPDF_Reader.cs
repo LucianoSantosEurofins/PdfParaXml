@@ -266,7 +266,28 @@ namespace PdfParaXml.Functions.IPOG
 
                     // Encontrando correspondências na string
                     MatchCollection correspondencias = regex.Matches(resultBruto);
-                    objResultadoBaixo.RLUPCBaixo = $"{correspondencias[0]},{correspondencias[1]}";
+
+                    if (correspondencias.Count == 0)
+                    {
+                        resultBruto = resultado;
+                        correspondencias = regex.Matches(resultBruto);
+
+                        if (correspondencias.Count == 0)
+                        {
+                            resultBruto = resultados[resultados.IndexOf(resultado) + 1];
+                            correspondencias = regex.Matches(resultBruto);
+                        }
+                    }
+
+                    try
+                    {
+                        objResultadoBaixo.RLUPCBaixo = $"{correspondencias[0]},{correspondencias[1]}";                        
+                    }
+
+                    catch
+                    {
+                        MessageBox.Show("Erro RLUPC");                       
+                    }
                     listaOrdenada.Add(objResultadoBaixo);
                 }
 

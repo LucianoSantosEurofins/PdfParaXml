@@ -130,7 +130,8 @@ namespace PdfParaXml.Functions.Sollutio
                     superExame.CodigoFormato = 1;
                     
                     exame.Metodo = metodo;
-                    var resultadosLista = new List<string> { numDeCelulas, bandeamento, interpretacao, material, Convert.ToBase64String(img) }; 
+                    var image = img == null ?  "" : Convert.ToBase64String(img);
+                    var resultadosLista = new List<string> { numDeCelulas, bandeamento, interpretacao, material, image }; 
                     valor = getFormatacaoValor();
                     valor.Text = resultadoTxt;
 

@@ -31,24 +31,32 @@ namespace PdfParaXml.Functions.PDFImgCapture
 
                     // Get the captured image
                     var resultadoDeImgExam = listener.GetImagens();
-                    var imagemBytes = resultadoDeImgExam[imgPosition].imgBytes;
-                    // Capture the specified region
-                    Bitmap resultImage = ConverterBytesParaImagem(imagemBytes);
-                    img = imagemBytes;
-                    // Save the region image to a file (or do whatever you need with it)
-                    using (MemoryStream ms = new MemoryStream())
+                    try
                     {
-                        using (FileStream fs = new FileStream(System.IO.Path.Combine(destinationImagePath, $"{RemoverCaracteresEspeciais(numeroAtendimento)}_{paciente}captured_Img.png"),FileMode.Create, FileAccess.ReadWrite))
+                        var imagemBytes = resultadoDeImgExam[imgPosition].imgBytes;
+                        // Capture the specified region
+                        Bitmap resultImage = ConverterBytesParaImagem(imagemBytes);
+                        img = imagemBytes;
+                        // Save the region image to a file (or do whatever you need with it)
+                        using (MemoryStream ms = new MemoryStream())
                         {
-                            var saveImage =  new Bitmap(resultImage);
-                            saveImage.Save(ms, ImageFormat.Png);
-                            byte[] bytes = ms.ToArray();
-                            fs.Write(bytes, 0, bytes.Length);
+                            using (FileStream fs = new FileStream(System.IO.Path.Combine(destinationImagePath, $"{RemoverCaracteresEspeciais(numeroAtendimento)}_{paciente}captured_Img.png"), FileMode.Create, FileAccess.ReadWrite))
+                            {
+                                var saveImage = new Bitmap(resultImage);
+                                saveImage.Save(ms, ImageFormat.Png);
+                                byte[] bytes = ms.ToArray();
+                                fs.Write(bytes, 0, bytes.Length);
+                            }
                         }
+                        return img;
                     }
+                    catch
+                    {
+                        return null;
+                    }                                                         
                 }
             }
-            return img;
+           
         }
         static string RemoverCaracteresEspeciais(string input)
         {
