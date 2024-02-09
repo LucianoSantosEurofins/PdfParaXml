@@ -15,9 +15,9 @@ namespace PdfParaXml
         {
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            textBox_LocationMendelics.Text = ConfigurationManager.AppSettings["pastaPadraoMendelics"];
+            textBox_LocationMendelics.Text= ConfigurationManager.AppSettings["pastaPadraoMendelics"];
             textBox_LocationSollutio.Text = ConfigurationManager.AppSettings["pastaPadraoSolutio"];
-            textBox_XMLLocation.Text = ConfigurationManager.AppSettings["pastaPadraoXML"];
+            textBox_XMLLocation.Text =      ConfigurationManager.AppSettings["pastaPadraoXML"];
 
             var path = "PDFs Usados";
 

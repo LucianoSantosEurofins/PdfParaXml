@@ -199,7 +199,7 @@ namespace PdfParaXml.Functions.Sollutio
         {
             var examsDict = new Dictionary<string, List<string>>();
             examsDict.Add("CARIÓTIPO CONSTITUCIONAL", new List<string>() { "BANDGSP", "CARIOTIPO DE SANGUE PERIFÉRICO COM BANDEAMENTO G", "CG_CONSTCATG" });              
-            examsDict.Add("CARIÓTIPO HEMATOLÓGICO", new List<string>() { "CARIHEMA", "CARIOTIPO DE DOENÇAS HEMATOLÓGICAS", "CARIHEMA" });             
+            examsDict.Add("CARIÓTIPO HEMATOLÓGICO", new List<string>()   { "CARIHEMA", "CARIOTIPO DE DOENÇAS HEMATOLÓGICAS", "CARIHEMA" });             
             examsDict.Add("3", new List<string>() { "BANDGMO", "CARIÓTIPO DE MEDULA ÓSSEA COM BANDEAMENTO G", "BANDGMO" });              
             examsDict.Add("4", new List<string>() { "DUFFY", "GENOTIPAGEM SISTEMA FY(DUFFY)", "DUFFY" });             
             examsDict.Add("5", new List<string>() { "BANDG100", "CARIÓTIPO DE SANGUE PERIFÉRICO(100 CÉLULAS)", "CG_100C" });

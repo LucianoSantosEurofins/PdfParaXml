@@ -341,7 +341,8 @@ namespace PdfParaXml.Functions.IPOG
                 string result = pdfContend.Substring(startIndexToUse, endIndex - startIndexToUse).Trim();
                 var restanteConclusaoParte1 = resultados[resultados.IndexOf(resultados.First(r => r.Contains(RemoveSpecialChars(result)))) - 1];
                 var parte2 = result.Replace("Interpretação:", "");
-                var resultadoRetorno = restanteConclusaoParte1.Contains("NEGATIVO") || restanteConclusaoParte1.Contains("POSITIVO") ? parte2.Replace(":", "") :  $"{restanteConclusaoParte1}{parte2}".Replace("CONCLUSÃO", "").Replace("Interpretação:", "").Replace(":", "");
+                //restanteConclusaoParte1.Contains("NEGATIVO") || restanteConclusaoParte1.Contains("POSITIVO") ? parte2.Replace(":", "") :
+                var resultadoRetorno =   $"{restanteConclusaoParte1}{parte2}".Replace("CONCLUSÃO", "").Replace("Interpretação:", "").Replace(":", "");
                 return resultadoRetorno;
             }
             else
