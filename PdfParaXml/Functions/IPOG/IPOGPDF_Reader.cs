@@ -212,7 +212,7 @@ namespace PdfParaXml.Functions.IPOG
             var resultados = txtContend.Split(':').Where(s => !string.IsNullOrEmpty(s)).ToList();
             var listaOrdenada = new List<ObjResultado>();
             var objResultadoBaixo = new ObjResultado();
-
+            txtContend = txtContend.Replace(".", "");
             var controleResultadoAltoRisco = false;
             var controleResultadoBaixoRisco = false;
             var controleResultadoRLUBaixoRisco = false;
