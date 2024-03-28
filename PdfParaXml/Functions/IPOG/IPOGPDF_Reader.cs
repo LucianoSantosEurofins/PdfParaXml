@@ -345,7 +345,7 @@ namespace PdfParaXml.Functions.IPOG
 
         private string getResultadoConclusao(string pdfContend, string reader, List<string> resultados, string nomePaciente)
         {
-            pdfContend = CapturarRestante("RESULTADO", pdfContend);
+            pdfContend = CapturarRestante(pdfContend, "RESULTADO");
             string startWord = "CONCLUSÃO";
             string endWord = ".";
             int startIndex = pdfContend.IndexOf(startWord);
