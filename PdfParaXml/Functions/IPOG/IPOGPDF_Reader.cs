@@ -293,15 +293,15 @@ namespace PdfParaXml.Functions.IPOG
 
                 if (resultado.Contains("RESULTADO"))
                 {
-                    string resultadoInter = getResultadoInterPretacao(txtContend, txtContend).Replace(":", ""); //txtContend[txtContend.IndexOf("RESULTADO") : 2];
-                    string ConclusaoInter = getResultadoConclusao(txtContend, txtContend, resultados).Replace(":", ""); //txtContend[txtContend.IndexOf("RESULTADO") : 2];
+                    string resultadoInter = getResultadoInterPretacao(txtContend, txtContend, NomePaciente).Replace(":", ""); //txtContend[txtContend.IndexOf("RESULTADO") : 2];
+                    string ConclusaoInter = getResultadoConclusao(txtContend, txtContend, resultados, NomePaciente).Replace(":", ""); //txtContend[txtContend.IndexOf("RESULTADO") : 2];
                     listaOrdenada.Add(new ObjResultado() { nome = "CAPTURA", resultado = resultadoInter, variavel = ConclusaoInter });
                 }
             }
             return listaOrdenada;
         }
 
-        private string getResultadoInterPretacao(string pdfContend, string reader)
+        private string getResultadoInterPretacao(string pdfContend, string reader, string paciente)
         {
             string startWord = "RESULTADO";
             string endWord = "CONCLUSÃO";
@@ -327,11 +327,27 @@ namespace PdfParaXml.Functions.IPOG
             return input.Replace(":", "").Replace(";", "").Replace(",", "").Replace(".", "");
         }
 
-        private string getResultadoConclusao(string pdfContend, string reader, List<string> resultados)
-        {           
+        static string CapturarRestante(string input, string palavra)
+        {
+            int index = input.IndexOf(palavra);
+
+            if (index == -1)
+            {
+                // Se a palavra não for encontrada, retorna uma string vazia
+                return string.Empty;
+            }
+            else
+            {
+                // Retorna o restante da string após a ocorrência da palavra
+                return input.Substring(index + palavra.Length).Trim();
+            }
+        }
+
+        private string getResultadoConclusao(string pdfContend, string reader, List<string> resultados, string nomePaciente)
+        {
+            pdfContend = CapturarRestante("RESULTADO", pdfContend);
             string startWord = "CONCLUSÃO";
             string endWord = ".";
-            pdfContend = reader;
             int startIndex = pdfContend.IndexOf(startWord);
             int endIndex = pdfContend.IndexOf(endWord);
 
