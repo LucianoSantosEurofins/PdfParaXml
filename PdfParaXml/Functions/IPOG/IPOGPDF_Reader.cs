@@ -209,10 +209,10 @@ namespace PdfParaXml.Functions.IPOG
 
         private List<ObjResultado> getResultadosHPVAltoeBaixoRisco(string txtContend, string NomePaciente)
         {
+            txtContend = txtContend.Replace(".", "");
             var resultados = txtContend.Split(':').Where(s => !string.IsNullOrEmpty(s)).ToList();
             var listaOrdenada = new List<ObjResultado>();
-            var objResultadoBaixo = new ObjResultado();
-            txtContend = txtContend.Replace(".", "");
+            var objResultadoBaixo = new ObjResultado();           
             var controleResultadoAltoRisco = false;
             var controleResultadoBaixoRisco = false;
             var controleResultadoRLUBaixoRisco = false;
