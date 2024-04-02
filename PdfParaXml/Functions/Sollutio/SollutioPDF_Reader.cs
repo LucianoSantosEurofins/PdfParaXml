@@ -85,7 +85,7 @@ namespace PdfParaXml.Functions.Sollutio
                         }
 
                         if (line.Contains("Interpretação:"))
-                            interpretacao = nomeExame.Contains("CARIÓTIPO HEMATOLÓGICO") ? line.Replace("Interpretação:", "") : getInterPretacao(textConted, reader);
+                            interpretacao = nomeExame.Contains("CARIÓTIPO HEMATOLÓGICO") ? Regex.Replace(line.Replace("Interpretação:", ""), @"^\s+$[\r\n]*", string.Empty, RegexOptions.Multiline)  : getInterPretacao(textConted, reader);
 
                         if (line.Contains("Resultado:"))
                             resultadoTxt =  getResultado(line);
@@ -294,7 +294,7 @@ namespace PdfParaXml.Functions.Sollutio
             {
                 int startIndexToUse = startIndex + startWord.Length;
                 string result = pdfContend.Substring(startIndexToUse, endIndex - startIndexToUse).Trim();
-                return result.Replace("Interpretação:", "");
+                return Regex.Replace(result.Replace("Interpretação:", ""), @"^\s+$[\r\n]*", string.Empty, RegexOptions.Multiline); 
             }
             else
             {
