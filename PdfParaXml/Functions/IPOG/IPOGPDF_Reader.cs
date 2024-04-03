@@ -292,9 +292,13 @@ namespace PdfParaXml.Functions.IPOG
                 }
 
                 if (resultado.Contains("RESULTADO"))
-                {
-                    string resultadoInter = getResultadoInterPretacao(txtContend, txtContend, NomePaciente).Replace(":", ""); //txtContend[txtContend.IndexOf("RESULTADO") : 2];
-                    string ConclusaoInter = getResultadoConclusao(txtContend, txtContend, resultados, NomePaciente).Replace(":", ""); //txtContend[txtContend.IndexOf("RESULTADO") : 2];
+                {                      
+                    string resultadoInter = getResultadoInterPretacao(txtContend, txtContend, NomePaciente).Replace(":", "").Contains("POSITIVO") ? "POSITIVO" : "NEGATIVO"; //txtContend[txtContend.IndexOf("RESULTADO") : 2];
+                    string ConclusaoInter = getHPVABConclusao(txtContend, txtContend, resultados, NomePaciente).Replace(":", "").Replace(resultadoInter, "");
+
+                    ConclusaoInter = ConclusaoInter.Contains("RISCO") ?  CapturarRestante(ConclusaoInter, "RISCO") : ConclusaoInter;
+
+                    //txtContend[txtContend.IndexOf("RESULTADO") : 2];
                     listaOrdenada.Add(new ObjResultado() { nome = "CAPTURA", resultado = resultadoInter, variavel = ConclusaoInter });
                 }
             }
@@ -341,6 +345,12 @@ namespace PdfParaXml.Functions.IPOG
                 // Retorna o restante da string após a ocorrência da palavra
                 return input.Substring(index + palavra.Length).Trim();
             }
+        }
+
+        private string getHPVABConclusao(string pdfContend, string reader, List<string> resultados, string nomePaciente)
+        {
+            pdfContend = CapturarRestante(pdfContend, "RESULTADO");
+            return pdfContend.Replace("CONCLUSÃO", "").Trim();
         }
 
         private string getResultadoConclusao(string pdfContend, string reader, List<string> resultados, string nomePaciente)
