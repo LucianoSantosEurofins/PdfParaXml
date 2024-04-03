@@ -295,10 +295,7 @@ namespace PdfParaXml.Functions.IPOG
                 {                      
                     string resultadoInter = getResultadoInterPretacao(txtContend, txtContend, NomePaciente).Replace(":", "").Contains("POSITIVO") ? "POSITIVO" : "NEGATIVO"; //txtContend[txtContend.IndexOf("RESULTADO") : 2];
                     string ConclusaoInter = getHPVABConclusao(txtContend, txtContend, resultados, NomePaciente).Replace(":", "").Replace(resultadoInter, "");
-
                     ConclusaoInter = ConclusaoInter.Contains("RISCO") ?  CapturarRestante(ConclusaoInter, "RISCO") : ConclusaoInter;
-
-                    //txtContend[txtContend.IndexOf("RESULTADO") : 2];
                     listaOrdenada.Add(new ObjResultado() { nome = "CAPTURA", resultado = resultadoInter, variavel = ConclusaoInter });
                 }
             }
@@ -325,12 +322,6 @@ namespace PdfParaXml.Functions.IPOG
             }
         }
 
-        static string RemoveSpecialChars(string input)
-        {
-            // Remove os caracteres :;,. utilizando Replace
-            return input.Replace(":", "").Replace(";", "").Replace(",", "").Replace(".", "");
-        }
-
         static string CapturarRestante(string input, string palavra)
         {
             int index = input.IndexOf(palavra);
@@ -351,30 +342,6 @@ namespace PdfParaXml.Functions.IPOG
         {
             pdfContend = CapturarRestante(pdfContend, "RESULTADO");
             return pdfContend.Replace("CONCLUSÃO", "").Trim();
-        }
-
-        private string getResultadoConclusao(string pdfContend, string reader, List<string> resultados, string nomePaciente)
-        {
-            pdfContend = CapturarRestante(pdfContend, "RESULTADO");
-            string startWord = "CONCLUSÃO";
-            string endWord = ".";
-            int startIndex = pdfContend.IndexOf(startWord);
-            int endIndex = pdfContend.IndexOf(endWord);
-
-            if (startIndex != -1 && endIndex != -1)
-            {
-                int startIndexToUse = startIndex + startWord.Length;               
-                string result = pdfContend.Substring(startIndexToUse, endIndex - startIndexToUse).Trim();
-                var restanteConclusaoParte1 = resultados[resultados.IndexOf(resultados.First(r => r.Contains(RemoveSpecialChars(result)))) - 1];
-                var parte2 = result.Replace("Interpretação:", "");
-                //restanteConclusaoParte1.Contains("NEGATIVO") || restanteConclusaoParte1.Contains("POSITIVO") ? parte2.Replace(":", "") :
-                var resultadoRetorno =   $"{restanteConclusaoParte1}{parte2}".Replace("CONCLUSÃO", "").Replace("Interpretação:", "").Replace(":", "");
-                return resultadoRetorno;
-            }
-            else
-            {
-                return "";
-            }
         }
 
         private List<ObjResultado> getResultadosHPVAltoRisco(string txtContend, string NomePaciente)
